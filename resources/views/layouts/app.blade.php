@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title> Admin </title>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -85,10 +86,10 @@
 
                     <ul class="list-unstyled components">
                         <li>
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Dashboard</a>
+                            <a href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li>
-                            <a href="#">Rooms</a>
+                            <a href="{{ route('rooms.index') }}">Rooms</a>
                         </li>
                         <li>
                             <a href="#">Make a Booking</a>

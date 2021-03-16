@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\RoomController;
+use App\Http\Controllers\API\ReservationController;
+use App\Http\Controllers\API\WebsiteController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +17,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('includes/welcome');
+Route::get('', function () {
+    return view('pages/website/index');
+});
+
+//Website
+Route::group(['prefix' => '/'], function () {
+    Route::get('index', [WebsiteController::class, 'index'])->name('website.index');
+    Route::get('rooms-list', [WebsiteController::class, 'rooms'])->name('website.rooms');
+    Route::get('facilities', [WebsiteController::class, 'facilities'])->name('website.facilities');
+    Route::get('contact-us', [WebsiteController::class, 'contact_us'])->name('website.contact-us');
+    Route::get('booking', [WebsiteController::class, 'booking'])->name('website.booking');
+    Route::get('booking-details', [WebsiteController::class, 'details'])->name('website.booking-details');
+
+    Route::get('getRoomsWebsite', [RoomController::class, 'getRoomsWebsite']);
+
+    Route::group(['prefix' => 'booking/'], function () {
+       Route::post('getVacantRooms', [RoomController::class, 'getVacantRooms']);
+       Route::post('createReservation', [ReservationController::class, 'createReservation']);
+       Route::post('checkReservation', [ReservationController::class, 'checkReservation']);
+        Route::post('savePayment', [ReservationController::class, 'savePayment']);
+    });
 });
 
 Auth::routes();
 
-Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
+
+Route::group(['prefix' => '/a', 'middleware' => 'auth'], function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
+
+    Route::group(['prefix' => 'rooms'], function () {
+        Route::get('/', [RoomController::class, 'index'])->name('rooms.index');
+    });
 });

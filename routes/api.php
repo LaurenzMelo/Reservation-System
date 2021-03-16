@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('login', 'API\UserController@login');
+Route::post('register', 'API\UserController@register');
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('details', 'API\UserController@details');
+});
+
+Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'rooms'], function () {
+        Route::get('/getRooms', [RoomController::class, 'getRooms']);
+    });
 });

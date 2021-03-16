@@ -118,12 +118,7 @@
             <div class="col-md-6">
                 <div class="card border shadow">
                     <div class="card-body">
-                        <p class="font-weight-bold">Number of Booked Rooms: </p>
-                        <!--<ul>
-                            <li><span> Family Room: <span class="font-weight-bold">32</span> bookings made </span></li>
-                            <li><span> Deluxe Room: <span class="font-weight-bold">15</span> bookings made </span></li>
-                            <li><span> Villa Room 1: <span class="font-weight-bold">7</span> bookings made </span></li>
-                        </ul>-->
+                        <p class="font-weight-bold">Number of Booking Per Rooms: </p>
                         <canvas id="myChart" width="10" height="10"></canvas>
                     </div>
                 </div>
