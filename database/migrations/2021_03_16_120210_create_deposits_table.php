@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReservationDetailsTable extends Migration
+class CreateDepositsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateReservationDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservation_details', function (Blueprint $table) {
+        Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reservation_id');
-            $table->unsignedBigInteger('room_id');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->string('reference_no');
+            $table->string('deposit_img');
+            $table->string('bank');
+            $table->string('time_deposited');
+            $table->decimal('amount', 10,2);
+            $table->boolean('isAcknowledged')->default(0);
             $table->timestamps();
 
             $table->foreign('reservation_id')->references('id')->on('reservations');
-            $table->foreign('room_id')->references('id')->on('rooms');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateReservationDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservation_details');
+        Schema::dropIfExists('deposits');
     }
 }

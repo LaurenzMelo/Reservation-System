@@ -38,6 +38,10 @@ window.Vue = require('vue').default;
 
 Vue.component('dashboard-index', require('./components/dashboard/dashboard-index.vue').default);
 Vue.component('list-of-rooms', require('./components/rooms/list-of-rooms.vue').default);
+Vue.component('deposit', require('./components/deposits/deposit.vue').default);
+Vue.component('reservation', require('./components/reservation/reservation.vue').default);
+
+
 Vue.component('index', require('./components/website/index.vue').default);
 Vue.component('rooms-list', require('./components/website/rooms-list.vue').default);
 Vue.component('facilities', require('./components/website/facilities.vue').default);

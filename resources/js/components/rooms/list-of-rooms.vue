@@ -13,14 +13,27 @@
                             single-line
                             hide-details
                         >
-
                         </v-text-field>
                     </v-card-title>
                     <v-data-table
                         :headers="headers"
                         :items="rooms"
                         :search="search"
-                    ></v-data-table>
+                        class="elevation-1 mt-4 border shadow"
+                    >
+                        <template v-slot:item.actions="{ item }">
+                            <button
+                                class="btn btn-success btn-sm"
+                            >
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button
+                                class="btn btn-primary btn-sm"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </template>
+                    </v-data-table>
                 </v-card>
             </div>
         </div>
@@ -33,12 +46,11 @@
         data() {
             return {
                 headers: [
-                    { text: 'Image', value: 'image'},
                     { text: 'Room Name', value: 'name' },
                     { text: 'Description', value: 'description' },
                     { text: 'Capacity', value: 'capacity' },
                     { text: 'Amount', value: 'amount' },
-                    { text: 'Action', value: 'actions' },
+                    { text: 'Action', value: 'actions', width:120},
                 ],
                 rooms: [],
                 search: '',

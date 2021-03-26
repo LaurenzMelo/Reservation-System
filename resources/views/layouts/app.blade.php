@@ -89,8 +89,15 @@
                             <a href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li>
+                            <a href="{{ route('deposit.index') }}">Deposit Slips</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('reservation.index') }}">Reservations</a>
+                        </li>
+                        <li>
                             <a href="{{ route('rooms.index') }}">Rooms</a>
                         </li>
+
                         <li>
                             <a href="#">Make a Booking</a>
                         </li>
@@ -116,7 +123,7 @@
                 <div id="content" class="col-md-10">
                     <nav class="navbar navbar-expand-lg navbar-light p-0 ml-2">
                         <div class="container-fluid p-2">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info text-white">
                                 <i class="fas fa-align-left"></i>
                             </button>
                         </div>

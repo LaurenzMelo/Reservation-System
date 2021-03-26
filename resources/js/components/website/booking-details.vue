@@ -35,11 +35,21 @@
                                 <div class="row mb-2">
                                     <div class="col-md-3 offset-md-3">
                                         <label class="font-weight-bold"> Bank Name </label>
-                                        <input type="text" class="form-control w-100 m-auto" placeholder="Bank Name" name="res_num" v-model="bank_name" required>
+                                        <input type="text" class="form-control w-100 m-auto" placeholder="Bank Name" name="bank_n" v-model="bank_name" required>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="font-weight-bold"> Time Deposited </label>
-                                        <input type="text" class="form-control w-100 m-auto" placeholder="Time Deposited" name="res_num" v-model="time_deposited" required>
+                                        <input type="text" class="form-control w-100 m-auto" placeholder="Time Deposited" name="time_d" v-model="time_deposited" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-3 offset-md-3">
+                                        <label class="font-weight-bold"> Amount </label>
+                                        <input type="text" class="form-control w-100 m-auto" placeholder="Amount" name="amount_d" v-model="amount" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="font-weight-bold"> Reference Number </label>
+                                        <input type="text" class="form-control w-100 m-auto" placeholder="Reference Number" name="ref_no" v-model="ref_no" required>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
@@ -121,25 +131,63 @@
             return {
                 but_option: '',
                 res_no: '',
-                nights_stay: 0,
-                res_details: [],
                 bank_name: '',
                 time_deposited: '',
+                amount: '',
+                ref_no: '',
+                nights_stay: 0,
+                res_details: [],
             }
         },
         methods: {
             sendPayment() {
-                let formData = new FormData()
+                Swal.fire({
+                    title: 'Send Receipt?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let formData = new FormData()
 
-                var payment = document.querySelector('#payment_slip_id');
-                formData.append('payment_slip', payment.files[0]);
-                formData.append('bank_name', this.bank_name);
-                formData.append('time_deposited', this.time_deposited);
-                formData.append('res_no', this.res_no);
+                        var payment = document.querySelector('#payment_slip_id');
+                        formData.append('payment_slip', payment.files[0]);
+                        formData.append('bank_name', this.bank_name);
+                        formData.append('ref_no', this.ref_no);
+                        formData.append('amount', this.amount);
+                        formData.append('time_deposited', this.time_deposited);
+                        formData.append('res_no', this.res_no);
 
-                axios.post('//' + window.location.host + '/booking/savePayment', formData)
-                .then(() => {
+                        axios.post('//' + window.location.host + '/booking/savePayment', formData)
+                            .then(() => {
+                                Swal.fire(
+                                    'Success!',
+                                    'Your Deposit Slip has been submitted. Kindly check your email again for more details.',
+                                    'success'
+                                )
+                                this.bank_name = '';
+                                this.amount = '';
+                                this.time_deposited = '';
+                                this.res_no = '';
+                                this.ref_no = '';
 
+                                const index = async function () {
+                                    await new Promise(resolve => {
+                                        setTimeout(resolve, 5000)
+                                    })
+                                    window.location.replace('/');
+                                }
+                                index();
+                            }).catch(response => {
+                            Swal.fire(
+                                'Failed!',
+                                'Reservation Number Not Found.',
+                                'error'
+                            )
+                            });
+                    }
                 });
             },
             buttonOption(a)

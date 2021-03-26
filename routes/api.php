@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\DepositController;
+use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +30,22 @@ Route::group(['middleware' => 'auth:api'], function(){
 Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'rooms'], function () {
         Route::get('/getRooms', [RoomController::class, 'getRooms']);
+    });
+
+    Route::group(['prefix' => 'deposits'], function () {
+        Route::get('/getDeposit', [DepositController::class, 'getDeposit']);
+        Route::get('/getApprovedDeposit', [DepositController::class, 'getApprovedDeposit']);
+        Route::post('/approvePayment', [DepositController::class, 'approvePayment']);
+        Route::post('/disapprovePayment', [DepositController::class, 'disapprovePayment']);
+        Route::post('/revertPayment', [DepositController::class, 'revertPayment']);
+    });
+
+    Route::group(['prefix' => 'reservation'], function () {
+        Route::get('getReservationUpcoming', [ReservationController::class, 'getReservationUpcoming']);
+        Route::get('getReservationOngoing', [ReservationController::class, 'getReservationOngoing']);
+        Route::post('deleteReservation', [ReservationController::class, 'deleteReservation']);
+        Route::post('checkIn', [ReservationController::class, 'checkIn']);
+        Route::post('checkOut', [ReservationController::class, 'checkOut']);
+        Route::post('payCash', [ReservationController::class, 'payCash']);
     });
 });

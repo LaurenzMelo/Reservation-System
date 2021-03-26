@@ -150,10 +150,21 @@
                                     <h4 class="font-weight-bold font-oswald">Tell us your particulars</h4>
                                     <hr style="width:10%; margin-top:3px; border-top:3px solid #68A6BF">
                                     <div class="user-forms mt-4">
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Full Name <span v-if="form.name == ''" class="font-weight-bold" style="color:red">*</span></label>
-                                            <input type="text" class="form-control" placeholder="e.g. Juan L. Dela Cruz" v-model="form.name" name="name">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">First Name <span v-if="form.first_name == ''" class="font-weight-bold" style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="e.g. Juan" v-model="form.first_name" name="first_name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Last Name <span v-if="form.last_name == ''" class="font-weight-bold" style="color:red">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="e.g. Dela Cruz" v-model="form.last_name" name="first_name">
+                                                </div>
+                                            </div>
                                         </div>
+
                                         <div class="form-group">
                                             <label class="font-weight-bold">Email <span v-if="form.email == ''" class="font-weight-bold" style="color:red">*</span></label>
                                             <input type="email" class="form-control" placeholder="e.g. juandelacruz@email.com" v-model="form.email" name="email">
@@ -263,7 +274,8 @@
                 nights_stay: 0,
                 total_amount: 0,
                 form: {
-                    name: '',
+                    first_name: '',
+                    last_name: '',
                     email: '',
                     retype_email: '',
                     contact_no: '',
@@ -310,7 +322,8 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         axios.post('//' + window.location.host + '/booking/createReservation', {
-                            name: this.form.name,
+                            first_name: this.form.first_name,
+                            last_name: this.form.last_name,
                             email: this.form.email,
                             contact_no: this.form.contact_no,
                             requests: this.form.requests,

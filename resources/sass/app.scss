@@ -124,6 +124,16 @@ ul ul a {
     z-index:9999;
 }
 
+.book-now-container{
+    position: absolute !important;
+    top: 450px;
+    right: 10%;
+    background-color: rgba(0, 0, 0, 0.8);
+    height:20%;
+    width: 20%;
+    z-index: 999;
+}
+
 .button-book:hover {
     background-color: #333333 !important;
     color: white !important;

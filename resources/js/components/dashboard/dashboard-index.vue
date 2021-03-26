@@ -12,21 +12,22 @@
                     <div class="col-md-8">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6 class="font-weight-bold"> Bookings Made </h6>
-                                <span>Number of Bookings Made: </span><br>
+                                <h6 class="font-weight-bold"> On Going Reservation</h6>
+                                <span> No. of On Going Reservation: {{ this.res_ongoing.length }}</span><br>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="font-weight-bold"> Lorem Ipsum </h6>
-                                <span>Lorem Ipsum dolor sit amet: </span>
+                                <h6 class="font-weight-bold"> Upcoming Reservation </h6>
+                                <span> No. of Upcoming Reservation: {{ this.res_upcoming.length }}</span>
                             </div>
                         </div>
                         <div class="row mt-3 mb-2">
                             <div class="col-md-6">
-                                <h6 class="font-weight-bold"> Lorem Ipsum </h6>
-                                <span>Lorem Ipsum dolor sit amet: </span>
+                                <h6 class="font-weight-bold"> Active Reservation </h6>
+                                <span> No. of reservation made for this month: </span>
                             </div>
                             <div class="col-md-6">
-
+                                <h6 class="font-weight-bold"> Total Profit </h6>
+                                <span> Profit for the month: </span>
                             </div>
                         </div>
                     </div>
@@ -137,9 +138,29 @@
                 dashboard:'',
                 date_today: '',
                 current_month: '',
+                res_upcoming: [],
+                res_ongoing: [],
             }
         },
         methods: {
+            getReservationUpcoming() {
+                axios.get('api/reservation/getReservationUpcoming')
+                    .then(response => {
+                        for(let i = 0; i < response.data.length; i++)
+                        {
+                            this.res_upcoming.push(response.data[i]);
+                        }
+                    });
+            },
+            getReservationOngoing() {
+                axios.get('api/reservation/getReservationOngoing')
+                    .then(response => {
+                        for(let i = 0; i < response.data.length; i++)
+                        {
+                            this.res_ongoing.push(response.data[i]);
+                        }
+                    });
+            },
             createChart()
             {
                 let ctx = document.getElementById('myChart');
@@ -201,6 +222,8 @@
         },
         created() {
             this.getMonth;
+            this.getReservationOngoing();
+            this.getReservationUpcoming();
         }
     }
 

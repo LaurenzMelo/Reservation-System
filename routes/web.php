@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\DepositController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\WebsiteController;
@@ -43,10 +44,18 @@ Route::group(['prefix' => '/'], function () {
 Auth::routes();
 
 
-Route::group(['prefix' => '/a', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
 
     Route::group(['prefix' => 'rooms'], function () {
         Route::get('/', [RoomController::class, 'index'])->name('rooms.index');
+    });
+
+    Route::group(['prefix' => 'deposits'], function () {
+        Route::get('/', [DepositController::class, 'index'])->name('deposit.index');
+    });
+
+    Route::group(['prefix' => 'reservation'], function () {
+        Route::get('/', [ReservationController::class, 'index'])->name('reservation.index');
     });
 });

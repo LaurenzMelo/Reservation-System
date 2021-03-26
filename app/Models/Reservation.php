@@ -9,10 +9,27 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'reservation_no',
+        'amount',
+        'guest_no',
+        'is_paid',
+        'deposit_img',
+        'bank',
+        'time_deposited',
+        'name',
+        'email',
+        'contact_no',
+        'requests'
+    ];
 
     public function reservation_details()
     {
         return $this->hasMany(ReservationDetails::class, 'reservation_id', 'id');
+    }
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, 'reservation_id','id');
     }
 }

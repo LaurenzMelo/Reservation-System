@@ -1,7 +1,7 @@
 <template>
     <div>
         <img src="images/resort.jpg" style="margin-top:-100px; width:100%" class="cover-image">
-        <div class="datepicker-long">
+        <!--<div class="datepicker-long">
             <v-date-picker
                 v-model="check_date"
                 is-range
@@ -52,56 +52,14 @@
                     </div>
                 </template>
             </v-date-picker>
+        </div>-->
+        <div class="book-now-container text-center p-4">
+            <h5 class="font-weight-bold font-white mb-4">Looking for a great place to stay?</h5>
+            <a :href="'/booking'" style="text-decoration: none; color: black !important">
+                <button type="button" class="btn btn-primary w-75 ml-1 button-book font-weight-bold" style="font-size: 14px !important; background-color: white"> BOOK NOW </button>
+            </a>
         </div>
 
-        <!--<div class="datepicker-form text-center">
-            <h4 class="font-weight-bold font-white mt-2">Stay with us!</h4>
-            <v-date-picker
-                v-model="check_date"
-                is-range
-                :masks="masks"
-                color="blue"
-                is-dark
-                class="mt-1"
-            >
-                <template v-slot="{ inputValue, inputEvents }">
-                    <div class="mt-2">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <input
-                                :value="inputValue.start"
-                                v-on="inputEvents.start"
-                                class="border p-1 rounded focus:outline-none focus:border-blue-300 font-montserrat "
-                                style="width: 65%; background-color: white"
-                                placeholder="Check In"
-                                :min-date="new Date()"
-                            />
-                            <i class="far fa-calendar-minus fa-2x font-white ml-2"></i>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <input
-                                :value="inputValue.end"
-                                v-on="inputEvents.end"
-                                class="border p-1 rounded focus:outline-none focus:border-blue-300 font-montserrat"
-                                style="width: 65%; background-color: white"
-                                placeholder="Check Out"
-                                :min-date="new Date()"
-                            />
-                            <i class="far fa-calendar-minus fa-2x font-white ml-2"></i>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <input
-                                type="text"
-                                class="border p-1 rounded focus:outline-none focus:border-blue-300 font-montserrat"
-                                style="width: 65%; background-color: white"
-                                placeholder="No. Of Guests"
-                            />
-                            <i class="fas fa-user-friends fa-lg font-white ml-2"></i>
-                        </div>
-                    </div>
-                </template>
-            </v-date-picker>
-            <button type="button" class="btn btn-primary font-white mt-2" style="width: 77%; border-radius:20px"> BOOK NOW </button>
-        </div>-->
         <div class="container mt-5 mb-5">
             <h4 class="font-weight-bold text-center"> ABOUT US </h4>
             <hr style="width: 50%; margin:auto;">

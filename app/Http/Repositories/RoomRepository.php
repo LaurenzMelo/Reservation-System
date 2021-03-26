@@ -13,7 +13,7 @@ class RoomRepository
 {
     public function getRooms()
     {
-        dd('rooms');
+        return Room::all();
     }
 
     public function getRoomsWebsite()
