@@ -23,6 +23,15 @@ import VueFormWizard from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 Vue.use(VueFormWizard)
 
+//Vue Loader
+import Loading from 'vue-loading-overlay';
+Vue.use(Loading, {
+    color: 'blue',
+    loader: 'spinner',
+    width: 64,
+    height: 64,
+})
+
 //Vuetify
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'

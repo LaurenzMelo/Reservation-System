@@ -183,7 +183,15 @@
                         responsive: true,
                     }
                 });
-            }
+            },
+            checkExpiredReservation() {
+                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
+                axios.post('api/reservation/checkExpiredReservation', {
+                    datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+                }).then(response => {
+
+                })
+            },
         },
         mounted() {
             this.createChart();
@@ -222,6 +230,7 @@
         },
         created() {
             this.getMonth;
+            this.checkExpiredReservation();
             this.getReservationOngoing();
             this.getReservationUpcoming();
         }

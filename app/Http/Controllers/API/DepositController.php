@@ -30,6 +30,11 @@ class DepositController extends Controller
         return $this->depositRepository->getApprovedDeposit();
     }
 
+    public function getDisapprovedDeposit()
+    {
+        return $this->depositRepository->getDisapprovedDeposit();
+    }
+
     public function approvePayment(Request $request)
     {
         return $this->depositRepository->approvePayment($request);
@@ -43,5 +48,10 @@ class DepositController extends Controller
     public function revertPayment(Request $request)
     {
         return $this->depositRepository->revertPayment($request);
+    }
+
+    public function revertDisapprove(Request $request)
+    {
+        return $this->depositRepository->revertDisapprove($request);
     }
 }

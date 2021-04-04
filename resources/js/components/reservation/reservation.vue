@@ -9,11 +9,17 @@
                             <label class="form-check-label">Upcoming</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name=ongoing id="App" value="On Going" v-model="res_option">
+                            <input class="form-check-input" type="radio" name="ongoing" id="App" value="On Going" v-model="res_option">
                             <label class="form-check-label">Checked In</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="expired" id="Exp" value="Expired" v-model="res_option">
+                            <label class="form-check-label">Expired</label>
                         </div>
                     </div>
                 </div>
+
+                <!-- Upcoming Reservations -->
                 <div class="col-md-12" v-if="res_option == 'Upcoming'">
                     <v-card>
                         <v-card-title>
@@ -34,6 +40,12 @@
                             :search="search"
                             class="elevation-1 mt-4 border shadow text-center"
                         >
+                            <template v-slot:item.reservation_details[0].start_date="{ item }">
+                                {{ formatDate(item.reservation_details[0].start_date) }}
+                            </template>
+                            <template v-slot:item.reservation_details[0].end_date="{ item }">
+                                {{ formatDate(item.reservation_details[0].end_date) }}
+                            </template>
                             <template v-slot:item.remaining="{ item }">
                                 {{ formatNumber(item.amount - item.payment) }}
                             </template>
@@ -76,10 +88,12 @@
                         </v-data-table>
                     </v-card>
                 </div>
-                <div class="col-md-12" v-else>
+
+                <!-- On Going Reservations -->
+                <div class="col-md-12" v-else-if="res_option == 'On Going'">
                     <v-card>
                         <v-card-title>
-                            Reservation List
+                            Checked in Reservation List
                             <v-spacer></v-spacer>
                             <v-text-field
                                 v-model="search"
@@ -96,6 +110,15 @@
                             :search="search"
                             class="elevation-1 mt-4 border shadow text-center"
                         >
+                            <template v-slot:item.remaining="{ item }">
+                                {{ formatNumber(item.amount - item.payment) }}
+                            </template>
+                            <template v-slot:item.amount="{ item }">
+                                {{ formatNumber(item.amount) }}
+                            </template>
+                            <template v-slot:item.payment="{ item }">
+                                {{ formatNumber(item.payment) }}
+                            </template>
                             <template v-slot:item.is_paid="{ item }">
                                 <div v-if="item.is_paid == 0">
                                     Unpaid
@@ -111,6 +134,55 @@
                                 >
                                     <i class="fas fa-door-closed"></i>
                                 </button>
+                                <button
+                                    class="btn btn-primary btn-sm"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                </div>
+
+                <!-- Expired Reservations -->
+                <div class="col-md-12" v-else>
+                    <v-card>
+                        <v-card-title>
+                            Expired Reservation List
+                            <v-spacer></v-spacer>
+                            <v-text-field
+                                v-model="search"
+                                append-icon="mdi-magnify"
+                                label="Search"
+                                single-line
+                                hide-details
+                            >
+                            </v-text-field>
+                        </v-card-title>
+                        <v-data-table
+                            :headers="headers"
+                            :items="res_expired"
+                            :search="search"
+                            class="elevation-1 mt-4 border shadow text-center"
+                        >
+                            <template v-slot:item.remaining="{ item }">
+                                {{ formatNumber(item.amount - item.payment) }}
+                            </template>
+                            <template v-slot:item.amount="{ item }">
+                                {{ formatNumber(item.amount) }}
+                            </template>
+                            <template v-slot:item.payment="{ item }">
+                                {{ formatNumber(item.payment) }}
+                            </template>
+                            <template v-slot:item.is_paid="{ item }">
+                                <div v-if="item.is_paid == 0">
+                                    Unpaid
+                                </div>
+                                <div v-else>
+                                    Paid
+                                </div>
+                            </template>
+                            <template v-slot:item.actions="{ item }">
                                 <button
                                     class="btn btn-primary btn-sm"
                                 >
@@ -235,6 +307,8 @@
             return {
                 headers: [
                     { text: 'Reservation Number', value: 'reservation_no', class: 'text-center'},
+                    { text: 'Check In', value: 'reservation_details[0].start_date', class: 'text-center' },
+                    { text: 'Check Out', value: 'reservation_details[0].end_date', class: 'text-center' },
                     { text: 'Amount', value: 'amount', class: 'text-center' },
                     { text: 'Payment', value: 'payment', class: 'text-center' },
                     { text: 'Remaining', value: 'remaining', class: 'text-center' },
@@ -243,6 +317,7 @@
                 ],
                 res_upcoming: [],
                 res_ongoing: [],
+                res_expired: [],
                 selected: [],
                 start_date: '',
                 end_date: '',
@@ -282,10 +357,14 @@
                         confirmButtonText: 'Yes'
                     }).then((result) => {
                         if (result.value) {
+                            let loader = this.$loading.show();
                             axios.post('api/reservation/payCash', {
                                 id: this.selected.id,
                                 payment_cash: this.payment_cash
                             }).then(response => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
                                 Swal.fire(
                                     'Complete!',
                                     'Payment Successful',
@@ -311,9 +390,13 @@
                     confirmButtonText: 'Yes'
                 }).then((result) => {
                     if (result.value) {
+                        let loader = this.$loading.show();
                         axios.post('api/reservation/checkOut', {
                             id: id,
                         }).then(response => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
                             Swal.fire(
                                 'Complete!',
                                 'Payment Successful',
@@ -351,9 +434,13 @@
                         confirmButtonText: 'Yes'
                     }).then((result) => {
                         if (result.value) {
+                            let loader = this.$loading.show();
                             axios.post('api/reservation/checkIn', {
                                 id: item.id,
                             }).then(response => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
                                 Swal.fire(
                                     'Check In Successful',
                                     'Complete!',
@@ -429,6 +516,25 @@
                         }
                     });
             },
+            getReservationExpired() {
+                this.res_expired = [];
+
+                axios.get('api/reservation/getReservationExpired')
+                    .then(response => {
+                        for(let i = 0; i < response.data.length; i++)
+                        {
+                            this.res_expired.push(response.data[i]);
+                        }
+                    });
+            },
+            checkExpiredReservation() {
+                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
+                axios.post('api/reservation/checkExpiredReservation', {
+                    datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+                }).then(response => {
+
+                })
+            },
             formatNumber(num) {
                 return '₱' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             },
@@ -436,12 +542,11 @@
                 return moment(value).format('MMM. DD, YYYY')
             }
         },
-        computed: {
-
-        },
         created() {
+            this.checkExpiredReservation();
             this.getReservationOngoing();
             this.getReservationUpcoming();
+            this.getReservationExpired();
         }
     }
 </script>

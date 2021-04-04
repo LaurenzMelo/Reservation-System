@@ -96,7 +96,7 @@
                             <div class="col-md-12">
                                 <h5 class="text-center font-weight-bold">Personal Details</h5>
                                 <hr class="m-auto" style="border-top:3px solid #68A6BF; width: 5%">
-                                <div><span class="font-weight-bold">Full Name:</span> {{ res_details.name }}</div>
+                                <div><span class="font-weight-bold">Full Name:</span> {{ res_details.first_name }} {{ res_details.last_name }}</div>
                                 <div><span class="font-weight-bold">Email Address:</span> {{ res_details.email }}</div>
                                 <div><span class="font-weight-bold">Contact Number:</span> {{ res_details.contact_no }}</div>
                                 <div>
@@ -150,6 +150,7 @@
                     confirmButtonText: 'Confirm'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        let loader = this.$loading.show();
                         let formData = new FormData()
 
                         var payment = document.querySelector('#payment_slip_id');
@@ -162,9 +163,12 @@
 
                         axios.post('//' + window.location.host + '/booking/savePayment', formData)
                             .then(() => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
                                 Swal.fire(
                                     'Success!',
-                                    'Your Deposit Slip has been submitted. Kindly check your email again for more details.',
+                                    'Your Deposit Slip has been submitted. Kindly check your email from time to time to check its status.',
                                     'success'
                                 )
                                 this.bank_name = '';
@@ -179,13 +183,14 @@
                                     })
                                     window.location.replace('/');
                                 }
+
                                 index();
                             }).catch(response => {
-                            Swal.fire(
-                                'Failed!',
-                                'Reservation Number Not Found.',
-                                'error'
-                            )
+                                Swal.fire(
+                                    'Failed!',
+                                    'Reservation Number Not Found.',
+                                    'error'
+                                )
                             });
                     }
                 });
@@ -201,9 +206,13 @@
                 }
             },
             checkRes() {
+                let loader = this.$loading.show();
                 axios.post('//' + window.location.host + '/booking/checkReservation', {
                     res_no: this.res_no,
                 }).then(response => {
+                    setTimeout(() => {
+                        loader.hide()
+                    },10)
                     this.res_details = response.data.details;
 
                     let start_date = moment(this.res_details.reservation_details[0].start_date).format('YYYY-MM-DD 00:00:00');
@@ -212,6 +221,12 @@
                     let date1 = moment(start_date);
                     let date2 = moment(end_date);
                     this.nights_stay = date2.diff(date1, 'days');
+                }).catch(response => {
+                    Swal.fire(
+                        'Failed!',
+                        'Reservation Number Not Found.',
+                        'error'
+                    )
                 });
             },
             formatNumber(num) {

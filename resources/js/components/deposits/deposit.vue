@@ -4,17 +4,22 @@
             <div class="card-body">
                 <div class="row d-flex justify-content-between">
                     <div class="mt-2 ml-2">
-                        <h4 class="font-weight-bold" v-if="d_slip == 'Pending'">Pending Deposit Slips</h4>
-                        <h4 class="font-weight-bold" v-else>Approved Deposit Slips</h4>
+                        <h4 class="font-weight-bold" v-if="d_slip == 'Pending'"> Pending Deposit Slips </h4>
+                        <h4 class="font-weight-bold" v-else-if="d_slip == 'Approved' "> Approved Deposit Slips </h4>
+                        <h4 class="font-weight-bold" v-else> Disapproved Deposit Slips </h4>
                     </div>
                     <div class="mt-2 mr-2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="d_slip_pending" id="Pen" value="Pending" v-model="d_slip">
-                            <label class="form-check-label" for="d_slip_pending">Pending</label>
+                            <label class="form-check-label" for="Pen">Pending</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="d_slip_approved" id="App" value="Approved" v-model="d_slip">
-                            <label class="form-check-label" for="d_slip_approved">Approved</label>
+                            <label class="form-check-label" for="App">Approved</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="d_slip_disapproved" id="Dis" value="Dispproved" v-model="d_slip">
+                            <label class="form-check-label" for="Dis">Disapproved</label>
                         </div>
                     </div>
                 </div>
@@ -52,7 +57,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-3 d-flex align-items-center text-center" v-else>
+                <div class="row mt-3 d-flex align-items-center text-center" v-else-if="d_slip == 'Approved'">
                     <div class="col-md-12 text-center" v-if="approved_deposits.length == 0">
                         None
                     </div>
@@ -71,6 +76,24 @@
                     </div>
                 </div>
 
+                <div class="row mt-3 d-flex align-items-center text-center" v-else>
+                    <div class="col-md-12 text-center" v-if="disapproved_deposits.length == 0">
+                        None
+                    </div>
+                    <div class="col-md-12" v-for="slips in disapproved_deposits" v-else>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ slips.reservation.reservation_no }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ slips.amount }}
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-danger" @click="revertDisapprove(slips)"><i class="text-white fas fa-history"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -121,11 +144,46 @@
             return {
                 deposits: [],
                 approved_deposits: [],
+                disapproved_deposits: [],
                 selected: [],
                 d_slip: 'Pending',
             }
         },
         methods: {
+            revertDisapprove(slip) {
+                Swal.fire({
+                    title: 'Revert Disapprovement?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let loader = this.$loading.show();
+                        axios.post('api/deposits/revertDisapprove', {
+                            selected: slip,
+                        }).then(() => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
+                            Swal.fire(
+                                'Success',
+                                'Disapprovement Reverted',
+                                'success'
+                            )
+
+                            const index = async function () {
+                                await new Promise(resolve => {
+                                    setTimeout(resolve, 1500)
+                                })
+                                location.reload();
+                            }
+                            index();
+                        })
+                    }
+                });
+            },
             revertSlip(slip) {
                 Swal.fire({
                     title: 'Revert Payment?',
@@ -136,9 +194,13 @@
                     confirmButtonText: 'Confirm'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        let loader = this.$loading.show();
                         axios.post('api/deposits/revertPayment', {
                             selected: slip,
                         }).then(() => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
                             Swal.fire(
                                 'Success',
                                 'Payment Reverted',
@@ -166,9 +228,13 @@
                     confirmButtonText: 'Confirm'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                            let loader = this.$loading.show();
                         axios.post('api/deposits/disapprovePayment', {
                             selected: this.selected,
                         }).then(() => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
                             Swal.fire(
                                 'Success',
                                 'Payment Disapproved',
@@ -196,9 +262,13 @@
                     confirmButtonText: 'Confirm'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        let loader = this.$loading.show();
                         axios.post('api/deposits/approvePayment', {
                             selected: this.selected,
                         }).then(() => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
                             Swal.fire(
                                 'Success!',
                                 'Payment Approved',
@@ -221,6 +291,14 @@
                 this.selected = value;
                 console.log(this.selected);
             },
+            checkExpiredReservation() {
+                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
+                axios.post('api/reservation/checkExpiredReservation', {
+                    datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+                }).then(response => {
+
+                })
+            },
         },
         computed: {
             getDeposit() {
@@ -238,11 +316,21 @@
                             this.approved_deposits.push(response.data[i]);
                         }
                     });
+            },
+            getDisapprovedDeposit() {
+                axios.get('api/deposits/getDisapprovedDeposit')
+                    .then(response => {
+                        for (let i = 0; i < response.data.length; i++) {
+                            this.disapproved_deposits.push(response.data[i]);
+                        }
+                    });
             }
         },
         created() {
+            this.checkExpiredReservation();
             this.getDeposit;
             this.getApprovedDeposit;
+            this.getDisapprovedDeposit;
         }
     }
 </script>

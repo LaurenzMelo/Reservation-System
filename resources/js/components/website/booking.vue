@@ -48,6 +48,7 @@
                                     :masks="masks"
                                     color="blue"
                                     is-dark
+                                    :min-date="new Date()"
                                     class="mt-1"
                                 >
                                     <template v-slot="{ inputValue, inputEvents }">
@@ -58,7 +59,6 @@
                                                 v-on="inputEvents.start"
                                                 class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
                                                 placeholder="Check In"
-                                                :min-date="new Date()"
                                             />
                                         </div>
                                         <div class="form-group">
@@ -73,17 +73,6 @@
                                         </div>
                                     </template>
                                 </v-date-picker>
-                                <!--<div class="form-group">
-                                    <label class="font-weight-bold"> No. Of Room(s): </label>
-                                    <select class="p-1 rounded border p-2 form-control" v-model="rooms_no">
-                                        <option value="" disabled selected hidden>No. Of Room(s)</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </div>-->
                                 <div class="form-group">
                                     <label class="font-weight-bold"> No. Of Guest(s): </label>
                                     <select class="p-1 rounded font-montserrat border p-2 form-control" v-model="guests_no">
@@ -259,6 +248,7 @@
 
 <script>
     let moment = require('moment');
+    import 'vue-loading-overlay/dist/vue-loading.css';
 
     export default {
         data() {
@@ -273,6 +263,7 @@
                 guests_no: '',
                 nights_stay: 0,
                 total_amount: 0,
+                isLoading: false,
                 form: {
                     first_name: '',
                     last_name: '',
@@ -290,13 +281,20 @@
             check_date: function (val) {
                 //First computation of nights stay
                 this.check_in = moment(this.check_date['start']).format('MMM. DD, YYYY');
-                this.check_out = moment(this.check_date['end']).format('MMM. DD, YYYY');
+                this.check_out = moment(this.check_date['end']).format('MMM. DD, YYYY')
+
+                if(this.check_in == this.check_out) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: "Can't pick same day.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
 
                 var date1 = moment(this.check_date['start']);
                 var date2 = moment(this.check_date['end']);
-                console.log(date1 + ' - ' + date2);
-                console.log(date1);
-                console.log(date2);
                 this.nights_stay = date2.diff(date1, 'days');
 
                 //After Changes
@@ -321,6 +319,7 @@
                     confirmButtonText: 'Confirm'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        let loader = this.$loading.show();
                         axios.post('//' + window.location.host + '/booking/createReservation', {
                             first_name: this.form.first_name,
                             last_name: this.form.last_name,
@@ -333,6 +332,9 @@
                             guest_no: this.guests_no,
                             rooms: this.booked,
                         }).then(response => {
+                            setTimeout(() => {
+                                loader.hide()
+                            },10)
                             Swal.fire(
                                 'Success!',
                                 'Your reservation is confirmed. Please check your email address for further details.',
@@ -395,20 +397,45 @@
                     })
                     return false;
                 } else {
-                    return true;
+                    var numberOfCapacity = 0;
+                    for(let i = 0; i < this.booked.length; i++) {
+                        numberOfCapacity += parseFloat(this.booked[i].capacity)
+                    }
+                    if(this.guests_no > numberOfCapacity) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'Room Capacity cannot accommodate your number of guest(s).',
+                            showConfirmButton: false,
+                            timer: 2500
+                        })
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
             },
             secondValidation() {
                 return true;
             },
             getVacantRooms() {
-                axios.post('//' + window.location.host + '/booking/getVacantRooms', {
-                    check_date: this.check_date,
-                    rooms_no: this.rooms_no,
-                    guests_no: this.guests_no,
-                }).then(response => {
-                    this.filtered_rooms = response.data.vacant_rooms;
-                })
+                if(this.check_in == this.check_out) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: "Check in and Check out date must not be the same date.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    axios.post('//' + window.location.host + '/booking/getVacantRooms', {
+                        check_date: this.check_date,
+                        rooms_no: this.rooms_no,
+                        guests_no: this.guests_no,
+                    }).then(response => {
+                        this.filtered_rooms = response.data.vacant_rooms;
+                    })
+                }
             },
             formatNumber(num) {
                 return '₱' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')

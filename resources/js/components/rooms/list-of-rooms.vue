@@ -57,13 +57,16 @@
             }
         },
         methods: {
+            checkExpiredReservation() {
+                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
+                axios.post('api/reservation/checkExpiredReservation', {
+                    datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+                }).then(response => {
 
+                })
+            },
         },
         computed:{
-            /*...mapGetters({
-                token: 'authentication/token'
-            }),*/
-
             getRooms(){
                 axios.get('api/rooms/getRooms')
                 .then(response => {
@@ -75,6 +78,7 @@
             }
         },
         created() {
+            this.checkExpiredReservation();
             this.getRooms;
         }
     }

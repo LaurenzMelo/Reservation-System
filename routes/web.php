@@ -37,7 +37,7 @@ Route::group(['prefix' => '/'], function () {
        Route::post('getVacantRooms', [RoomController::class, 'getVacantRooms']);
        Route::post('createReservation', [ReservationController::class, 'createReservation']);
        Route::post('checkReservation', [ReservationController::class, 'checkReservation']);
-        Route::post('savePayment', [ReservationController::class, 'savePayment']);
+       Route::post('savePayment', [ReservationController::class, 'savePayment']);
     });
 });
 

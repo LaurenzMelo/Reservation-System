@@ -31,6 +31,11 @@ class ReservationController extends Controller
         return $this->reservationRepository->getReservationOngoing();
     }
 
+    public function getReservationExpired()
+    {
+        return $this->reservationRepository->getReservationExpired();
+    }
+
     public function createReservation(ReservationRequest $request)
     {
         return $this->reservationRepository->createReservation($request);
@@ -64,5 +69,10 @@ class ReservationController extends Controller
     public function payCash(Request $request)
     {
         return $this->reservationRepository->payCash($request);
+    }
+
+    public function checkExpiredReservation(Request $request)
+    {
+        return $this->reservationRepository->checkExpiredReservation($request);
     }
 }

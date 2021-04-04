@@ -22,6 +22,7 @@ class CreateDepositsTable extends Migration
             $table->string('time_deposited');
             $table->decimal('amount', 10,2);
             $table->boolean('isAcknowledged')->default(0);
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
 
             $table->foreign('reservation_id')->references('id')->on('reservations');
