@@ -60,7 +60,7 @@
                                     <div class="col-md-3 text-center">
                                         <label class="font-weight-bold">Payment Slip</label>
                                         <div class="d-flex align-items-center">
-                                            <input type="file" class="form-control" name="payment_slip" id="payment_slip_id" accept="image/png, image/jpeg, .xlsx, .docx, .pdf">
+                                            <input type="file" class="form-control" name="payment_slip" id="payment_slip_id" accept="image/png, image/jpeg" @change="imageChange">
                                         </div>
                                     </div>
                                 </div>
@@ -140,6 +140,30 @@
             }
         },
         methods: {
+            imageChange(e) {
+                let deposit_slip = e.target.files[0];
+                if (deposit_slip['size'] > 2111775) {
+                    document.getElementById("payment_slip_id").value = null;
+                    Swal.fire(
+                      'Error',
+                      'Deposit Slip must not exceed 2MB.',
+                      'error'
+                    )
+                } else if (deposit_slip['type'] != 'image/png' && deposit_slip['type'] != 'image/jpeg') {
+                    document.getElementById("payment_slip_id").value = null;
+                    Swal.fire(
+                      'Error',
+                      'Deposit Slip should be in .png or .jpeg file format.',
+                      'error'
+                    )
+                } else {
+                    Swal.fire(
+                      'Success',
+                      'Deposit Slip is accepted.',
+                      'success'
+                    )
+                }
+            },
             sendPayment() {
                 Swal.fire({
                     title: 'Send Receipt?',

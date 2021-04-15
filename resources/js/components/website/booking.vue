@@ -167,8 +167,8 @@
                                             <input type="text" class="form-control" placeholder="e.g. 09123456789" v-model="form.contact_no" name="contact_no">
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Date of Arrival & Other Requests <span v-if="form.requests == ''" class="font-weight-bold" style="color:red">*</span></label>
-                                            <textarea class="form-control" rows="4" v-model="form.requests" placeholder="Date of Arrival & Other Requests" name="requests"></textarea>
+                                            <label class="font-weight-bold"> Time of Arrival <span v-if="form.requests == ''" class="font-weight-bold" style="color:red">*</span></label>
+                                            <textarea class="form-control" rows="4" v-model="form.requests" placeholder="Time of Arrival & other requests" name="requests"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -228,7 +228,7 @@
                                 <div class="col-md-12">
                                     <h5 class="text-center font-weight-bold">Personal Details</h5>
                                     <hr class="m-auto" style="border-top:3px solid #68A6BF; width: 5%">
-                                    <div><span class="font-weight-bold">Full Name:</span> {{ form.name }}</div>
+                                    <div><span class="font-weight-bold">Full Name:</span> {{ form.first_name }} {{ form.last_name }}</div>
                                     <div><span class="font-weight-bold">Email Address:</span> {{ form.email }}</div>
                                     <div><span class="font-weight-bold">Contact Number:</span> {{ form.contact_no }}</div>
                                     <hr>

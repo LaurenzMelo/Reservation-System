@@ -18,7 +18,7 @@ class ReservationRepository
 {
     public function createReservation($request)
     {
-        $date_tomorrow = Carbon::now()->addDays(1)->setTimezone('Singapore');
+        $date_tomorrow = Carbon::now()->addDays(3)->setTimezone('Singapore');
 
         $reservation_no = rand(1111111111,9999999999);
 
@@ -75,7 +75,7 @@ class ReservationRepository
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 24 hours to complete your payment.
+                <br><br>Please be reminded that you will be only given 72 hours to complete your payment.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->AltBody = 'Good day! If you received this email, then you have been successfully make a reservation to
@@ -86,7 +86,7 @@ class ReservationRepository
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 24 hours to complete your payment.
+                <br><br>Please be reminded that you will be only given 72 hours to complete your payment.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->send();
