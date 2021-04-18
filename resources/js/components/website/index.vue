@@ -1,58 +1,6 @@
 <template>
     <div>
         <img src="images/resort.jpg" style="margin-top:-100px; width:100%" class="cover-image">
-        <!--<div class="datepicker-long">
-            <v-date-picker
-                v-model="check_date"
-                is-range
-                :masks="masks"
-                color="blue"
-                is-dark
-                class="mt-1"
-            >
-                <template v-slot="{ inputValue, inputEvents }">
-                    <div class="mt-1 flex align-items-center justify-items-center ml-2">
-                        <input
-                            :value="inputValue.start"
-                            v-on="inputEvents.start"
-                            class="p-1 rounded font-montserrat font-white"
-                            style="width: 18%;"
-                            placeholder="Check In"
-                            :min-date="new Date()"
-                        />
-                        <i class="far fa-calendar-minus font-white fa-lg mr-2"></i>
-                        <input
-                            :value="inputValue.end"
-                            v-on="inputEvents.end"
-                            class="p-1 rounded font-montserrat font-white"
-                            style="width: 18%;"
-                            placeholder="Check Out"
-                            :min-date="new Date()"
-                        />
-                        <i class="far fa-calendar-minus fa-lg font-white mr-2"></i>
-                        <select class="p-1 rounded font-montserrat font-white" style="width:18%">
-                            <option value="" disabled selected hidden>No. Of Room(s)</option>
-                            <option value="1" style="color:black !important">1</option>
-                            <option value="2" style="color:black !important">2</option>
-                            <option value="3" style="color:black !important">3</option>
-                            <option value="4" style="color:black !important">4</option>
-                            <option value="5" style="color:black !important">5</option>
-                        </select>
-                        <i class="fas fa-angle-down fa-lg font-white mr-3" style="margin-left: -25px"></i>
-                        <select class="p-1 rounded font-montserrat font-white" style="width:18%">
-                            <option value="" disabled selected hidden>No. Of Guest(s)</option>
-                            <option value="1" style="color:black !important">1</option>
-                            <option value="2" style="color:black !important">2</option>
-                            <option value="3" style="color:black !important">3</option>
-                            <option value="4" style="color:black !important">4</option>
-                            <option value="5" style="color:black !important">5</option>
-                        </select>
-                        <i class="fas fa-angle-down fa-lg font-white mr-3" style="margin-left: -25px"></i>
-                        <a :href="'/booking'" style="text-decoration: none; color: black !important"><button type="button" class="ml-1 button-book font-weight-bold" style="width: 17%; height: 46px; margin-top:-4px; font-size: 14px !important; background-color: white"> BOOK </button></a>
-                    </div>
-                </template>
-            </v-date-picker>
-        </div>-->
         <div class="book-now-container text-center p-4">
             <h5 class="font-weight-bold font-white mb-4">Looking for a great place to stay?</h5>
             <a :href="'/booking'" style="text-decoration: none; color: black !important">
@@ -169,6 +117,62 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="openModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-4">
+                        <h4 class="font-weight-bold"> GUEST ADVISORY - COVID-19 </h4>
+                        <hr style="width:20%; margin-top:3px; border-top:3px solid #68A6BF; margin-top:20px !important" class="m-0">
+                        <h6 class="font-weight-bold mt-2 text-center"> YOUR HEALTH AND SAFETY - OUR TOP PRIORITY </h6>
+                        <p class="text-justify text-indent-sentence">
+                            To ensure that you have a safe and pleaseant to stay with us, our team has put in place safe practices to protect your
+                            well-being. Across our properties, we are adhering to the directives and recommendations of the relevant government and
+                            public health authorities. Our team is committed to maintaining high hygiene standards and have implemented additional
+                            precautionary measures as part of our enhanced cleaning protocols.
+                        </p>
+                        <p> The management is keen on complying the guidelines set by the Department of Health, to wit Hotel Guests are: </p>
+                        <ul class="ml-4">
+                            <li>
+                                required to wear a face mask in the public areas of the hotel;
+                            </li>
+                            <li>
+                                required to submit themselves to a body temperature check upon entering hotel premises;
+                            </li>
+                            <li>
+                                advised to observe special distancing of at least one (1) meter;
+                            </li>
+                            <li>
+                                advised to frequently wash their hands and follow proper cough etiquette.
+                            </li>
+                        </ul>
+                        <p> We have imposed additional precautionary measures to keep Sand Bar Beach Resort COVID-19 free. </p>
+                        <ul class="ml-4">
+                            <li>
+                                Hotel staff are required to strictly follow the same guidelines mentioned above;
+                            </li>
+                            <li>
+                                The Management distributes personal protective equipment for all employess daily; and
+                            </li>
+                            <li>
+                                Hotel roms are deeply sanitized and disinfected every check-out.
+                            </li>
+                        </ul>
+                        <p class="text-justify text-indent-sentence">
+                            The health and safety of our guests and team members remain a priority for us. We are staying vigilant
+                            and are ready to adopt all appropriate measures as the Covid-19 situation evolves. We are doing everything
+                            we can to ensure you have peace of mind when you stay with us. Thank you for choosing Sand Bar Beach Resort
+                            as your preferred host at accommodation in Nasugbu, Batangas. Stay Safe!
+                        </p>
+                        <p> Should you have any concerns or queries, please email us at sandbarbeachresort@gmail.com.</p>
+                        <hr style="width:80%; margin-top:3px; border-top:3px solid #68A6BF; margin-top:20px !important" class="m-auto">
+                        <div class="text-center mt-4">
+                            <button type="button" class="btn btn-danger text-white w-25" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -186,10 +190,14 @@
             }
         },
         methods: {
-
+            openModalCovid()
+            {
+                $('#openModal').modal('show');
+            }
         },
         mounted() {
             this.current_date = moment().format()
+            this.openModalCovid();
         }
     }
 </script>

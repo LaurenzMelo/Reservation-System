@@ -73,7 +73,7 @@
                                         </div>
                                     </template>
                                 </v-date-picker>
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <label class="font-weight-bold"> No. Of Guest(s): </label>
                                     <select class="p-1 rounded font-montserrat border p-2 form-control" v-model="guests_no">
                                         <option value="" disabled selected hidden>No. Of Guest(s)</option>
@@ -87,9 +87,8 @@
                                         <option value="8">8</option>
                                         <option value="9">9</option>
                                         <option value="10">10</option>
-
                                     </select>
-                                </div>
+                                </div>-->
                                 <div class="text-center">
                                     <button type="button" @click="getVacantRooms()" class="btn btn-lg mt-2 text-center font-weight-bold text-white" style="background-color: #68A6BF"> Apply </button>
                                 </div>
@@ -97,8 +96,8 @@
                         </div>
                         <div class="col-md-9">
                             <div class="col-md-12">
-                                <div v-for="room in filtered_rooms">
-                                    <div class="row border shadow" style="margin-bottom:2rem">
+                                <div v-for="room in filtered_rooms" style="margin-bottom:2rem">
+                                    <div class="row border shadow">
                                         <div class="col-md-4 font-small">
                                             <div v-if="room.image != null">
                                                 <img class="room-img" :src="room.image" style="max-width: 100%; max-height:100%">
@@ -111,6 +110,7 @@
                                             <h5 class="font-weight-bold mt-2">{{ room.name }}</h5>
                                             <p class="text-indent-sentence text-justify">{{ room.description }}</p>
                                             <h6 class="mt-2"><span class="font-weight-bold">Room Capacity: </span> {{ room.capacity }}</h6>
+
                                         </div>
                                         <div class="col-md-4">
                                             <h5 class="font-weight-bold mt-2 text-center">Amenities & Inclusions</h5>
@@ -123,9 +123,35 @@
                                             <h5 class="font-weight-bold mt-2 text-center">Rate Per Night</h5>
                                             <p class="text-center font-weight-bold font-med">{{ formatNumber(room.amount) }}</p>
                                             <p class="text-center">{{ formatNumber(room.amount - (room.amount * 0.12)) }} + {{ formatNumber(room.amount * 0.12) }} (Tax & Fees)</p>
-                                            <button type="button" class="btn btn-success text-white w-100" @click="bookRoom(room)"> Book </button>
+                                            <button type="button" class="btn btn-primary text-white w-100" data-toggle="modal" data-target="#guestModal" @click="toggleGuest(room)"> Book </button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"> Book {{ selected_toggle.name }} </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form @submit.prevent="bookRoom(selected_toggle)">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <div class="font-weight-bold"> Please Enter Number of Guest: </div>
+                                                <input type="number" class="form-control" v-model="specific_guests_no" placeholder="No. Of Guest(s)" required>
+                                                <div style="color:red; font-size: 10px"> Maximum of {{ selected_toggle.capacity }} </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success text-white"> Book </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -257,10 +283,12 @@
                 vacant_rooms: [],
                 filtered_rooms: [],
                 booked: [],
+                selected_toggle: [],
                 check_in: '',
                 check_out: '',
                 rooms_no: '',
-                guests_no: '',
+                specific_guests_no: '',
+                guests_no: 0,
                 nights_stay: 0,
                 total_amount: 0,
                 isLoading: false,
@@ -309,6 +337,9 @@
             }
         },
         methods: {
+            toggleGuest(room) {
+                this.selected_toggle = room;
+            },
             createReservation() {
                 Swal.fire({
                     title: 'Confirm Reservation?',
@@ -352,11 +383,34 @@
                 })
             },
             bookRoom(room) {
-                this.booked.push(room);
-                this.filtered_rooms = this.filtered_rooms.filter(function(filter) {
-                    return filter.id != room.id;
-                })
-                this.total_amount += parseFloat(room.amount * this.nights_stay);
+                if(room.capacity < parseFloat(this.specific_guests_no)) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'No. of guest(s) cannot exceed maximum capacity of the room',
+                        text: 'Maximum Capacity: ' + room.capacity,
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                    this.specific_guests_no = '';
+                } else if(parseFloat(this.specific_guests_no) == 0) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'No. of guest(s) cannot be zero (0)',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                } else {
+                    this.guests_no += parseFloat(this.specific_guests_no);
+                    this.booked.push(room);
+                    this.filtered_rooms = this.filtered_rooms.filter(function(filter) {
+                        return filter.id != room.id;
+                    })
+                    this.total_amount += parseFloat(room.amount * this.nights_stay);
+                    this.specific_guests_no = '';
+                    $('#guestModal').modal('hide');
+                }
             },
             removeRoom(room) {
                 this.filtered_rooms.unshift(room);
@@ -378,15 +432,6 @@
                         timer: 1500
                     })
                     return false;
-                } else if (this.guests_no == '') {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: 'Please fill up the number of guest',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    return false;
                 } else if(this.booked.length == 0) {
                     Swal.fire({
                         position: 'center',
@@ -397,7 +442,7 @@
                     })
                     return false;
                 } else {
-                    var numberOfCapacity = 0;
+                    /*var numberOfCapacity = 0;
                     for(let i = 0; i < this.booked.length; i++) {
                         numberOfCapacity += parseFloat(this.booked[i].capacity)
                     }
@@ -412,7 +457,8 @@
                         return false;
                     } else {
                         return true;
-                    }
+                    }*/
+                    return true;
                 }
             },
             secondValidation() {
