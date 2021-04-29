@@ -36,6 +36,21 @@ class ReservationController extends Controller
         return $this->reservationRepository->getReservationExpired();
     }
 
+    public function getReservationActive()
+    {
+        return $this->reservationRepository->getReservationActive();
+    }
+
+    public function getReservationThisMonth()
+    {
+        return $this->reservationRepository->getReservationThisMonth();
+    }
+
+    public function getMostRecentClient()
+    {
+        return $this->reservationRepository->getMostRecentClient();
+    }
+
     public function createReservation(ReservationRequest $request)
     {
         return $this->reservationRepository->createReservation($request);

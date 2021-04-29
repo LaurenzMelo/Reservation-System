@@ -244,7 +244,7 @@
                                     <hr>
                                     <div class="mb-3" v-for="book in booked">
                                         <h6>⤐ <span class="font-weight-bold mr-2">{{ book.name }}:</span> {{ formatNumber(book.amount) }} * {{ nights_stay }} (<span class="font-weight-bold">Price per Night * Night(s) of Stay</span>)</h6>
-                                        <span> {{ formatNumber(book.amount - (book.amount * 0.12)) }} + (Tax & Fee) {{ formatNumber(book.amount * 0.12) }}</span>
+                                        <div> <span class="font-weight-bold mr-2">Room Price Breakdown:</span> {{ formatNumber(book.amount - (book.amount * 0.12)) }} + (Tax & Fee) {{ formatNumber(book.amount * 0.12) }}</div>
                                     </div>
                                     <hr>
                                     <h6 class="text-center font-weight-bold"> Total Amount: {{ formatNumber(total_amount) }} </h6>

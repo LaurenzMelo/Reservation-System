@@ -110,6 +110,12 @@
                             :search="search"
                             class="elevation-1 mt-4 border shadow text-center"
                         >
+                            <template v-slot:item.reservation_details[0].start_date="{ item }">
+                                {{ formatDate(item.reservation_details[0].start_date) }}
+                            </template>
+                            <template v-slot:item.reservation_details[0].end_date="{ item }">
+                                {{ formatDate(item.reservation_details[0].end_date) }}
+                            </template>
                             <template v-slot:item.remaining="{ item }">
                                 {{ formatNumber(item.amount - item.payment) }}
                             </template>

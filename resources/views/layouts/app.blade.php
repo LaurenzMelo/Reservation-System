@@ -99,10 +99,7 @@
                         </li>
 
                         <li>
-                            <a href="#">Make a Booking</a>
-                        </li>
-                        <li>
-                            <a href="#">Settings</a>
+                            <a href="#">Change Room</a>
                         </li>
                         {{--<li>
                             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>

@@ -46,6 +46,9 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
         Route::get('getReservationUpcoming', [ReservationController::class, 'getReservationUpcoming']);
         Route::get('getReservationOngoing', [ReservationController::class, 'getReservationOngoing']);
         Route::get('getReservationExpired', [ReservationController::class, 'getReservationExpired']);
+        Route::get('getReservationActive', [ReservationController::class, 'getReservationActive']);
+        Route::get('getReservationThisMonth', [ReservationController::class, 'getReservationThisMonth']);
+        Route::get('getMostRecentClient', [ReservationController::class, 'getMostRecentClient']);
         Route::post('deleteReservation', [ReservationController::class, 'deleteReservation']);
         Route::post('checkIn', [ReservationController::class, 'checkIn']);
         Route::post('checkOut', [ReservationController::class, 'checkOut']);

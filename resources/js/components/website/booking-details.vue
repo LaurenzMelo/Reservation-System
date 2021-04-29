@@ -210,6 +210,9 @@
 
                                 index();
                             }).catch(response => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
                                 Swal.fire(
                                     'Failed!',
                                     'Reservation Number Not Found.',

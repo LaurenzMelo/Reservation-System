@@ -21,7 +21,7 @@ class CreateRoomsTable extends Migration
             $table->integer('capacity');
             $table->integer('capacity_extend');
             $table->boolean('is_occupied')->default(0);
-            $table->string('image')->default(0);
+            $table->string('image')->nullable();
             $table->text('amenities')->nullable();
             $table->timestamps();
         });

@@ -246,9 +246,39 @@ class ReservationRepository
             ->where('is_paid', 0)
             ->get();
 
-        for($i = 0; $i < count($expired); $i++) {
+        for($i = 0, $expired_len = count($expired); $i < $expired_len; $i++) {
             Reservation::where('id', $expired[$i]['id'])
                 ->update(['is_active' => 0]);
         }
+    }
+
+    public function getReservationActive()
+    {
+        return Reservation::where('is_active', 1)
+            ->where('is_checked_in', 1)
+            ->where('is_checked_out', 0)
+            ->with('reservation_details')
+            ->get();
+    }
+
+    public function getReservationThisMonth()
+    {
+        $first_day = Carbon::now()->firstOfMonth();
+        $last_day = Carbon::now()->lastOfMonth()->endOfDay();
+
+        return Reservation::whereHas('reservation_details', function (Builder $q) use ($first_day, $last_day) {
+            $q->whereBetween('start_date', [$first_day, $last_day]);
+        })->with('reservation_details', 'deposits')->get();
+    }
+
+    public function getMostRecentClient()
+    {
+        $first_day = Carbon::now()->firstOfMonth();
+        $last_day = Carbon::now()->lastOfMonth()->endOfDay();
+
+        $data['recent_clients'] = Reservation::latest()->take(3)->get();
+        $data['highest_res'] = ReservationDetails::whereBetween('start_date', [$first_day, $last_day]);
+
+        return response()->json($data);
     }
 }
