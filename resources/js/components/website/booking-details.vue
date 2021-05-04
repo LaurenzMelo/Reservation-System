@@ -141,6 +141,7 @@
         },
         methods: {
             imageChange(e) {
+                console.log(e);
                 let deposit_slip = e.target.files[0];
                 if (deposit_slip['size'] > 2111775) {
                     document.getElementById("payment_slip_id").value = null;

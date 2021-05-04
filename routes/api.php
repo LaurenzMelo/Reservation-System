@@ -54,5 +54,13 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
         Route::post('checkOut', [ReservationController::class, 'checkOut']);
         Route::post('payCash', [ReservationController::class, 'payCash']);
         Route::post('checkExpiredReservation', [ReservationController::class, 'checkExpiredReservation']);
+        Route::post('rebook', [ReservationController::class, 'rebook']);
+    });
+
+    Route::group(['prefix' => 'rooms'], function () {
+        Route::post('addRooms', [RoomController::class, 'addRooms']);
+        Route::post('editRooms', [RoomController::class, 'editRooms']);
+        Route::post('deleteRooms', [RoomController::class, 'deleteRooms']);
+        Route::post('getVacantRoomsChange', [RoomController::class, 'getVacantRoomsChange']);
     });
 });

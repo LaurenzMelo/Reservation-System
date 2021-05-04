@@ -17,7 +17,9 @@ class Room extends Model
         'amount',
         'capacity',
         'capacity_extend',
-        'is_occupied'
+        'is_occupied',
+        'image',
+        'amenities',
     ];
 
     public function reservation_details()

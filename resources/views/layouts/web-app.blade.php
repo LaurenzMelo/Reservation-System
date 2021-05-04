@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title> Sand Bar Beach Resort </title>
+        <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/icon type">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -22,7 +23,7 @@
     <body>
         <div id="app">
             <nav class="navbar-reduce-opacity navbar navbar-expand-lg navbar-dark background-color-s">
-                <a class="navbar-brand" href="{{ route('website.index') }}" style="margin-left:150px"><img src="{{url('/images/supreme.png')}}" height="75" width="75"></a>
+                <a class="navbar-brand" href="{{ route('website.index') }}" style="margin-left:150px"><img src="{{url('/images/logo.jpg')}}" height="75" width="75"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -59,33 +60,28 @@
                         <table class="d-flex justify-content-center">
                             <tr>
                                 <td class="pr-3 pt-2"><i class="fas fa-thumbtack"></i> </td>
-                                <td class="pt-2">Marikina-Infanta Hwy, Pasig, 1800 Metro Manila</Td>
-                            </tr>
-                            <tr>
-                                <td class="pr-3 pt-2"><i class="fas fa-phone"></i></td>
-                                <td class="pt-2">(02) 86123940</td>
+                                <td class="pt-2">
+                                    Sand Bar Beach Resort Calayo Rd, Nasugbu, Batangas 4231 Nasugbu, Philippines
+                                </Td>
                             </tr>
                             <tr>
                                 <td class="pr-3 pt-2"><i class="fas fa-mobile"></i></td>
-                                <td class="pt-2">(+63) 9524131251</td>
+                                <td class="pt-2">(+63) 918-449-5439</td>
                             </tr>
                             <tr>
                                 <td class="pr-3 pt-2"><i class="fas fa-envelope"></i></td>
-                                <td class="pt-2">email@email.com</td>
+                                <td class="pt-2">sandbarbeachresort@gmail.com</td>
                             </tr>
                         </table>
                     </div>
                     <div class="col-md-4">
                         <h5 class="text-center font-weight-bold font-oswald letter-spacing">CONNECT WITH US</h5>
                         <div class="row mt-1 text-center">
-                            <div class="col-md-4">
-                                <i class="fab fa-facebook-f fa-2x"></i>
+                            <div class="col-md-6">
+                                <a href="https://www.facebook.com/SandBarEco/"><i class="fab fa-facebook-f fa-2x"></i></a>
                             </div>
-                            <div class="col-md-4">
-                                <i class="fab fa-twitter fa-2x"></i>
-                            </div>
-                            <div class="col-md-4">
-                                <i class="fab fa-instagram fa-2x"></i>
+                            <div class="col-md-6">
+                                <a href="https://www.instagram.com/sandbarresort/"><i class="fab fa-instagram fa-2x"></i></a>
                             </div>
                         </div>
                     </div>

@@ -281,4 +281,31 @@ class ReservationRepository
 
         return response()->json($data);
     }
+
+    public function rebook($request)
+    {
+        /*dd($request->all());*/
+        //update amount
+        $update = Reservation::where('id', $request->reservation_id)
+            ->update(['amount' => $request->total_amount]);
+
+        //delete in reservation details
+        $delete_rooms_length = count($request->delete_rooms);
+        for($i = 0; $i < $delete_rooms_length; $i++) {
+            ReservationDetails::where('id', $request->delete_rooms[$i]['id'])
+                ->where('reservation_id', $request->reservation_id)
+                ->delete();
+        }
+
+        //add in reservation details
+        $added_rooms_length = count($request->added_rooms);
+        for($i = 0; $i < $added_rooms_length; $i++) {
+            ReservationDetails::create([
+                'reservation_id' => $request->reservation_id,
+                'room_id' => $request->added_rooms[$i]['id'],
+                'start_date' => $request->start_date . ' 14:00:00',
+                'end_date' => $request->end_date . ' 12:00:00',
+            ]);
+        }
+    }
 }

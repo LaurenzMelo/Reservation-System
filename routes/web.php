@@ -58,4 +58,8 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'reservation'], function () {
         Route::get('/', [ReservationController::class, 'index'])->name('reservation.index');
     });
+
+    Route::group(['prefix' => 'change'], function () {
+        Route::get('/', [RoomController::class, 'changeIndex'])->name('change.index');
+    });
 });

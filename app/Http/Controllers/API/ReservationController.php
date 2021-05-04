@@ -90,4 +90,9 @@ class ReservationController extends Controller
     {
         return $this->reservationRepository->checkExpiredReservation($request);
     }
+
+    public function rebook(Request $request)
+    {
+        return $this->reservationRepository->rebook($request);
+    }
 }

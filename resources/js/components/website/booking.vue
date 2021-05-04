@@ -73,22 +73,6 @@
                                         </div>
                                     </template>
                                 </v-date-picker>
-                                <!--<div class="form-group">
-                                    <label class="font-weight-bold"> No. Of Guest(s): </label>
-                                    <select class="p-1 rounded font-montserrat border p-2 form-control" v-model="guests_no">
-                                        <option value="" disabled selected hidden>No. Of Guest(s)</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                    </select>
-                                </div>-->
                                 <div class="text-center">
                                     <button type="button" @click="getVacantRooms()" class="btn btn-lg mt-2 text-center font-weight-bold text-white" style="background-color: #68A6BF"> Apply </button>
                                 </div>
