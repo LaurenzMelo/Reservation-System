@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title> Admin </title>
+    <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/icon type">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -85,16 +87,20 @@
 
                     <ul class="list-unstyled components">
                         <li>
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Dashboard</a>
+                            <a href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li>
-                            <a href="#">Rooms</a>
+                            <a href="{{ route('deposit.index') }}">Deposit Slips</a>
                         </li>
                         <li>
-                            <a href="#">Make a Booking</a>
+                            <a href="{{ route('reservation.index') }}">Reservations</a>
                         </li>
                         <li>
-                            <a href="#">Settings</a>
+                            <a href="{{ route('rooms.index') }}">Rooms</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('change.index') }}">Change Room</a>
                         </li>
                         {{--<li>
                             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
@@ -115,7 +121,7 @@
                 <div id="content" class="col-md-10">
                     <nav class="navbar navbar-expand-lg navbar-light p-0 ml-2">
                         <div class="container-fluid p-2">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info text-white">
                                 <i class="fas fa-align-left"></i>
                             </button>
                         </div>
