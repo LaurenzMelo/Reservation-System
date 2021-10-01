@@ -229,7 +229,18 @@
                         axios.post('api/rooms/deleteRooms', {
                             id: room.id
                         }).then(response => {
+                            Swal.fire(
+                                'Success!',
+                                'Room was deleted.',
+                                'success'
+                            )
                             this.getRooms();
+                        }).catch(() => {
+                            Swal.fire(
+                                'Failed!',
+                                'Room was not deleted. It may have been assigned to 1 or more reservation.',
+                                'error'
+                            )
                         })
                     }
                 });

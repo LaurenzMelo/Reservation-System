@@ -3,6 +3,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\ReservationDetails;
 use App\Models\Room;
 use Carbon\Carbon;
 use Exception;
@@ -112,6 +113,14 @@ class RoomRepository
 
     public function deleteRooms($id)
     {
-        return Room::where('id', $id)->delete();
+        $findRoom = ReservationDetails::where('room_id', $id)->get();
+
+        if(count($findRoom) >= 1) {
+            return Room::where('id', $id)->delete();
+        } else {
+            return response('Room has reservation', 400);
+        }
+
+
     }
 }

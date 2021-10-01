@@ -210,6 +210,7 @@
                 <tab-content title="Confirmation" :before-change="secondValidation">
                     <div class="container mb-2 border shadow">
                         <h3 class="font-weight-bold font-oswald text-center mt-4">Reservation Summary</h3>
+                        <h6 class="mt-2 text-center" style="color: red;">Please be reminded that we require 50% for the Downpayment*</h6>
                         <hr class="m-auto w-25" style="border-top:3px solid #68A6BF">
                         <div class="row mt-4">
                             <div class="col-md-6">
