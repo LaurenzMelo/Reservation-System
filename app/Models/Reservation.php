@@ -9,6 +9,8 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    protected $appends = ['full_name'];
+
     protected $fillable = [
         'reservation_no',
         'amount',
@@ -31,5 +33,10 @@ class Reservation extends Model
     public function deposits()
     {
         return $this->hasMany(Deposit::class, 'reservation_id','id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }

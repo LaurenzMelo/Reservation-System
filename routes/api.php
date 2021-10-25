@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\DepositController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\RoomController;
+use App\Http\Controllers\API\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,5 +63,9 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
         Route::post('editRooms', [RoomController::class, 'editRooms']);
         Route::post('deleteRooms', [RoomController::class, 'deleteRooms']);
         Route::post('getVacantRoomsChange', [RoomController::class, 'getVacantRoomsChange']);
+    });
+
+    Route::group(['prefix' => 'report'], function () {
+        Route::post('download', [ReportController::class, 'download']);
     });
 });

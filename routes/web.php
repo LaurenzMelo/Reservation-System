@@ -4,6 +4,7 @@ use App\Http\Controllers\API\DepositController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\WebsiteController;
+use App\Http\Controllers\API\ReportController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,5 +62,9 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'change'], function () {
         Route::get('/', [RoomController::class, 'changeIndex'])->name('change.index');
+    });
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::get('/', [ReportController::class, 'index'])->name('report.index');
     });
 });

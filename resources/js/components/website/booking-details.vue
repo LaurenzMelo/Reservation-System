@@ -177,12 +177,13 @@
                     if (result.isConfirmed) {
                         let loader = this.$loading.show();
                         let formData = new FormData()
+                        let fixAmount = this.amount.replace(/\,/g,'');
 
                         var payment = document.querySelector('#payment_slip_id');
                         formData.append('payment_slip', payment.files[0]);
                         formData.append('bank_name', this.bank_name);
                         formData.append('ref_no', this.ref_no);
-                        formData.append('amount', this.amount);
+                        formData.append('amount', parseInt(fixAmount, 10));
                         formData.append('time_deposited', this.time_deposited);
                         formData.append('res_no', this.res_no);
 

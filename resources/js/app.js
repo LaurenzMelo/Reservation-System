@@ -50,6 +50,7 @@ Vue.component('list-of-rooms', require('./components/rooms/list-of-rooms.vue').d
 Vue.component('deposit', require('./components/deposits/deposit.vue').default);
 Vue.component('reservation', require('./components/reservation/reservation.vue').default);
 Vue.component('change-rooms', require('./components/rooms/change-rooms.vue').default);
+Vue.component('report', require('./components/report/report.vue').default);
 
 
 Vue.component('index', require('./components/website/index.vue').default);

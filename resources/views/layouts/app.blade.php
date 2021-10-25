@@ -98,6 +98,9 @@
                         <li>
                             <a href="{{ route('change.index') }}">Change Room</a>
                         </li>
+                        <li>
+                            <a href="{{ route('report.index') }}">Reports</a>
+                        </li>
                         {{--<li>
                             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
                             <ul class="collapse list-unstyled" id="pageSubmenu">

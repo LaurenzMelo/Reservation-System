@@ -60,7 +60,7 @@ class DepositRepository
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'sandbarbeachresort@gmail.com';
-        $mail->Password = 'sandbar0327';
+        $mail->Password = 'Sand_bar03_27';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -137,7 +137,7 @@ class DepositRepository
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'sandbarbeachresort@gmail.com';
-            $mail->Password = 'sandbar0327';
+            $mail->Password = 'Sand_bar03_27';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -201,5 +201,9 @@ class DepositRepository
             ->update([
                 'isActive' => 1
             ]);
+    }
+
+    public function asPeso($value) {
+        return '₱' . number_format($value, 2);
     }
 }

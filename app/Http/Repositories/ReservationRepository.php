@@ -55,7 +55,7 @@ class ReservationRepository
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'sandbarbeachresort@gmail.com';
-            $mail->Password = 'sandbar0327';
+            $mail->Password = 'Sand_bar03_27';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -68,7 +68,7 @@ class ReservationRepository
             $mail->Subject = 'Reservation in Sand Bar Beach Resort';
             $mail->Body    = 'Good day! If you received this email, then you have been successfully make a reservation to
                 <b>Sand Bar Beach Resort!</b> Your reservation number is ' .  '<b>' . $reservation_no . '</b>. Your total remaining balance
-                is <b>' . $request->amount . '</b>.To make a payment,you can deposit to our
+                is <b>' . $this->asPeso(floatval($request->amount)) . '</b>.To make a payment,you can deposit to our
                 <b>BPI Account - 102035023052 - Sand Bar Beach Resort</b>. After making a deposit, be sure that you
                 will visit our site to send us the picture of deposit slip.
                 <br><br> Here is the steps in sending the picture of your deposit slip:
@@ -80,7 +80,7 @@ class ReservationRepository
 
             $mail->AltBody = 'Good day! If you received this email, then you have been successfully make a reservation to
                 Sand Bar Beach Resort! Your reservation number is ' . $reservation_no . '.  Your total remaining balance
-                is ' . $request->amount . '.To make a payment,you can deposit to our BPI Account - 102035023052 - Sand Bar Beach Resort.
+                is ' . $this->asPeso(floatval($request->amount)) . '.To make a payment,you can deposit to our BPI Account - 102035023052 - Sand Bar Beach Resort.
                 After making a deposit, be sure that you will visit our site to send us the picture of deposit slip.
                 <br><br> Here is the steps in sending the picture of your deposit slip.
                 <br>1. Visit our site at sandbarbeachresort.com
@@ -307,5 +307,9 @@ class ReservationRepository
                 'end_date' => $request->end_date . ' 12:00:00',
             ]);
         }
+    }
+
+    public function asPeso($value) {
+        return '₱' . number_format($value, 2);
     }
 }
