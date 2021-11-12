@@ -7,6 +7,15 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+html, body {
+    width:100%;
+    overflow-x:hidden;
+}
+
+.footer-container {
+    border-right: 3px solid white;
+}
+
 .wrapper {
     display:flex;
     width: 100%;
@@ -15,6 +24,10 @@
 #sidebar {
    min-height:100vh;
     min-width:200px;
+}
+
+.logo-nav {
+    margin-left:150px
 }
 
 #sidebar.active {
@@ -195,4 +208,69 @@ ul ul a {
     background-size: cover;
 }
 
+.room-header {
+    font-size: 3rem;
+}
+
+.room-desc {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    .cover-image {
+        height: 50vh !important;
+    }
+
+    .book-now-container {
+        display:none;
+    }
+
+    .logo-nav {
+        margin-left:20px
+    }
+
+    .room-header {
+        font-size: 1.2rem;
+    }
+
+    .room-desc {
+        font-size: 0.9rem;
+    }
+
+    .bg-text {
+        top: 30% !important;
+        width: 90% !important;
+    }
+
+    .mobile-remove {
+        display: none !important;
+    }
+
+    .remove-top {
+        padding-top: 10px !important;
+    }
+
+    .container-facilities {
+        position: absolute !important;
+        top: 30%;
+        left: 60%;
+        height: 30%;
+        width: 30%;
+        font-size:2rem;
+        color: white;
+        text-shadow: 2px 2px gray;
+    }
+
+    .navbar {
+        z-index: 3 !important;
+    }
+
+    .footer-container {
+        border-right: 0px !important;
+    }
+}
+
+.text-red {
+    color: red;
+}
 

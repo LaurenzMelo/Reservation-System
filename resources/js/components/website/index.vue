@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src="images/resort.jpg" style="margin-top:-100px; width:100%" class="cover-image">
+        <img src="images/feet.jpg" style="margin-top:-100px; width:100%;" class="cover-image">
         <div class="book-now-container text-center p-4">
             <h5 class="font-weight-bold font-white mb-4">Looking for a great place to stay?</h5>
             <a :href="'/booking'" style="text-decoration: none; color: black !important">
@@ -14,47 +14,55 @@
             <div class="row mt-4">
                 <div class="col-md-3">
                     <div class="card">
-                        <img class="card-img-top" src="images/placeholder-3.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="images/3.png" alt="Beach Resort Picture" style="height: 200px;">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">We Care For You</h5>
+                            <p class="card-text">
+                                We care for you and everyone with you.
+                            </p>
+                            <a :href="'/booking'" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <img class="card-img-top" src="images/placeholder-3.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="images/2.png" alt="Beach Resort Picture" style="height: 200px;">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">We Value You</h5>
+                            <p class="card-text">
+                                We value each and every customers we have.
+                            </p>
+                            <a :href="'/booking'" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <img class="card-img-top" src="images/placeholder-3.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="images/1.png" alt="Beach Resort Picture" style="height: 200px;">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">We Got You Covered</h5>
+                            <p class="card-text">
+                                There have been no recorded incident with our place!
+                            </p>
+                            <a :href="'/booking'" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <img class="card-img-top" src="images/placeholder-3.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="images/4.png" alt="Beach Resort Picture" style="height: 200px;">
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">We Deliver</h5>
+                            <p class="card-text">
+                                We deliver valuable service and place.
+                            </p>
+                            <a :href="'/booking'" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <h4 class="font-weight-bold text-center"> OUR ROOMS </h4>
             <hr style="width: 50%; margin:auto">
             <div class="row mt-4">
@@ -86,7 +94,7 @@
                     <img src="images/placeholder.jpg" class="image-fit-md-8">
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="container mt-5 mb-5">
             <div class="col-md-12">
@@ -96,23 +104,28 @@
                     <div class="col-md-4 pl-4 pr-4">
                         <img src="images/healthcare.svg" style="height:100px; width: 100px">
                         <br><span class="font-weight-bold">Hospitable Staff</span>
-                        <p class="text-justify pt-3 text-indent-sentence">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aliquam quis sem sit amet libero vulputate convallis. In libero felis, lobortis in neque id,
-                            porttitor aliquet tellus. Vivamus ut sapien in erat vulputate sollicitudin quis ac purus.</p>
+                        <p class="text-justify pt-3 text-indent-sentence">
+                            We (The management and the staffs) are committed in providing you
+                            the greatest of service. Our resort is a safe space for everyone and
+                            a haven for those who want to seek peace of mind.
+                        </p>
                     </div>
                     <div class="col-md-4 pl-4 pr-4">
                         <img src="images/sunset.svg" style="height:100px; width: 100px">
-                        <br><span class="font-weight-bold">Good Ambience</span>
-                        <p class="text-justify pt-3 text-indent-sentence">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aliquam quis sem sit amet libero vulputate convallis. In libero felis, lobortis in neque id,
-                            porttitor aliquet tellus. Vivamus ut sapien in erat vulputate sollicitudin quis ac purus.</p>
+                        <br><span class="font-weight-bold">Good Ambiance</span>
+                        <p class="text-justify pt-3 text-indent-sentence">
+                            Nothing beats the beach when it comes with good ambiance. Combined that
+                            with our top of the class facilities and serene view, you'll get a 
+                            one unforgettable experience
+                        </p>
                     </div>
                     <div class="col-md-4 pl-4 pr-4">
                         <img src="images/bio.svg" style="height:100px; width: 100px">
                         <br><span class="font-weight-bold">Eco-Friendly</span>
-                        <p class="text-justify pt-3 text-indent-sentence">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Aliquam quis sem sit amet libero vulputate convallis. In libero felis, lobortis in neque id,
-                            porttitor aliquet tellus. Vivamus ut sapien in erat vulputate sollicitudin quis ac purus.</p>
+                        <p class="text-justify pt-3 text-indent-sentence">
+                            We are also eco-friendly. We promote energy conservation, less usage of
+                            plastic, unharming plants and sea animals, and not polluting the sea.
+                        </p>
                     </div>
                 </div>
             </div>

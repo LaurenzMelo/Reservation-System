@@ -23,7 +23,7 @@
     <body>
         <div id="app">
             <nav class="navbar-reduce-opacity navbar navbar-expand-lg navbar-dark background-color-s">
-                <a class="navbar-brand" href="{{ route('website.index') }}" style="margin-left:150px"><img src="{{url('/images/logo.jpg')}}" height="75" width="75"></a>
+                <a class="navbar-brand logo-nav" href="{{ route('website.index') }}"><img src="{{url('/images/logo.jpg')}}" height="75" width="75"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -55,7 +55,7 @@
             @yield('content')
             <footer class="p-3 background-color-s text-white">
                 <div class="row col-md-12 mt-2 mb-2">
-                    <div class="col-md-4 offset-md-2" style="border-right: 3px solid white">
+                    <div class="col-md-4 offset-md-2 footer-container">
                         <h5 class="text-center font-weight-bold font-oswald letter-spacing">CONTACT</h5>
                         <table class="d-flex justify-content-center">
                             <tr>

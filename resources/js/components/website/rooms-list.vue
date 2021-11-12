@@ -2,9 +2,9 @@
     <div>
         <img src="images/rooms-web.jpg" style="margin-top:-100px; width:100%" class="cover-image">
         <div class="bg-text">
-            <span class="font-weight-bold font-oswald" style="font-size: 3rem;">ROOMS</span>
+            <span class="font-weight-bold font-oswald room-header">ROOMS</span>
             <hr style="border-top: 2px solid white; width: 20%; margin:auto; margin-top:20px; margin-bottom:20px">
-            <span style="font-size: 1.2rem">
+            <span class="room-desc">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Aliquam quis sem sit amet libero vulputate convallis.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -12,7 +12,7 @@
             </span>
         </div>
         <div class="container pt-5">
-            <div class="row mb-4">
+            <div class="row mb-4 mobile-remove">
                 <div class="col-md-3 offset-md-4 font-weight-bold pb-0 mb-0 font-med">
                     Description
                     <hr style="width:15%; margin-top:3px; border-top:3px solid #68A6BF">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div v-for="room in rooms">
+            <div v-for="room in rooms" :key="room.id">
                 <div class="row" style="margin-bottom:5rem">
                     <div class="col-md-4 font-small p-0" style="border-bottom: 5px solid #68A6BF">
                         <div v-if="room.image != null">
@@ -51,7 +51,7 @@
                         <h6 class="font-weight-bold text-center">Capacity</h6>
                         <p class="text-center">Up to <span class="font-weight-bold">{{ room.capacity }}</span> Guests</p>
                     </div>
-                    <div class="col-md-2 font-xl text-center font-weight-bold" style="border-bottom: 5px solid #68A6BF; padding-top:5rem">
+                    <div class="col-md-2 font-xl text-center font-weight-bold remove-top" style="border-bottom: 5px solid #68A6BF; padding-top:5rem">
                         {{ formatNumber(room.amount) }}
                     </div>
                 </div>

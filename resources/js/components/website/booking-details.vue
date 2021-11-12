@@ -191,7 +191,7 @@
                             .then(() => {
                                 setTimeout(() => {
                                     loader.hide()
-                                },10)
+                                },1000)
                                 Swal.fire(
                                     'Success!',
                                     'Your Deposit Slip has been submitted. Kindly check your email from time to time to check its status.',
@@ -202,6 +202,7 @@
                                 this.time_deposited = '';
                                 this.res_no = '';
                                 this.ref_no = '';
+                                document.getElementById("payment_slip_id").value = "";
 
                                 const index = async function () {
                                     await new Promise(resolve => {
