@@ -43,11 +43,11 @@
                                 </li>
                             @endif
 
-                            @if (Route::has('register'))
+                            <!-- @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
-                            @endif
+                            @endif -->
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -98,9 +98,11 @@
                         <li>
                             <a href="{{ route('change.index') }}">Change Room</a>
                         </li>
+                        @if(Auth::user()->name !== 'Receptionist1')
                         <li>
                             <a href="{{ route('report.index') }}">Reports</a>
                         </li>
+                        @endif
                         {{--<li>
                             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
                             <ul class="collapse list-unstyled" id="pageSubmenu">

@@ -20,7 +20,7 @@ class ReservationRepository
     {
         $date_tomorrow = Carbon::now()->addDays(3)->setTimezone('Singapore');
 
-        $reservation_no = rand(1111111111,9999999999);
+        $reservation_no = Carbon::now()->format("Ymd") . mt_rand(1000, 9999);
 
         $r = new Reservation;
         $r->reservation_no = $reservation_no;

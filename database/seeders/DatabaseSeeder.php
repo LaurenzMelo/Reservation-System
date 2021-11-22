@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Room;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+use function PHPSTORM_META\map;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -282,6 +287,22 @@ class DatabaseSeeder extends Seeder
             'is_occupied' => '0',
             'image' => 'images/rooms/room.jpg',
             'amenities' => '["Hot Showers, Airconditioned Room"]',
+            'created_at' => '2021-04-24 13:08:00',
+            'updated_at' => '2021-04-24 13:08:00'
+        ]);
+        
+        $admin = User::create([
+            'name' => 'Admin1',
+            'email' => 'superadmin@email.com',
+            'password' => Hash::make('sandbarbr'),
+            'created_at' => '2021-04-24 13:08:00',
+            'updated_at' => '2021-04-24 13:08:00'
+        ]);
+
+        $receptionist = User::create([
+            'name' => 'Receptionist1',
+            'email' => 'receptionist@email.com',
+            'password' => Hash::make('sandbarbrrecept'),
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
         ]);

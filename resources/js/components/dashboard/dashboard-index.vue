@@ -25,7 +25,7 @@
                                 <h6 class="font-weight-bold"> Active Reservation </h6>
                                 <span> No. of reservation made for this month: {{ res_this_month.length }}</span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" v-if="auth.name !== 'Receptionist1'">
                                 <h6 class="font-weight-bold"> Total Profit </h6>
                                 <span> Profit for the month: {{ formatNumber(total_profit) }}</span>
                             </div>
@@ -95,7 +95,7 @@
                     <div class="card-body">
                         <h6 class="font-weight-bold">Most Recent Client: </h6>
                         <hr style="width:15%; border-top:3px solid #68A6BF;" class="m-0 mb-3">
-                        <ul v-for="recent in res_recent_clients">
+                        <ul v-for="recent in res_recent_clients" :key="recent.id">
                             <li>
                                 <span> Name: <span class="font-weight-bold">{{ recent.first_name }} {{ recent.last_name }}</span> </span><br>
                                 <span> Email Address: <span class="font-weight-bold">{{ recent.email }}</span> </span><br>
@@ -108,7 +108,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card border shadow">
+                <div class="card border shadow" v-if="auth.name !== 'Receptionist1'">
                     <div class="card-body">
                         <h6 class="font-weight-bold"> Profit Summary: </h6>
                         <hr style="width:15%; border-top:3px solid #68A6BF;" class="m-0 mb-3">
