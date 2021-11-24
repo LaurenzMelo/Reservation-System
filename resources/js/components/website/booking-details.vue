@@ -1,7 +1,7 @@
 <template>
     <div style="min-height: 51vh">
-        <div class="mt-4 mb-4">
-            <div class="container-fluid">
+        <div class="mb-4">
+            <div class="container-fluid" style="padding-top:150px">
                 <div class="text-center">
                     <h1 class="font-oswald">Already have a booking?</h1>
                 </div>
@@ -32,7 +32,23 @@
                         </div>
                         <div v-else>
                             <form @submit.prevent="sendPayment()">
-                                <div class="row mb-2">
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <label class="font-weight-bold">Reservation Number</label>
+                                        <input type="text" class="form-control w-100 m-auto" placeholder="Input Your Reservation Number Here" name="res_num" v-model="res_no" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="font-weight-bold"> Amount </label>
+                                        <input type="number" class="form-control w-100 m-auto" placeholder="Amount" name="amount_d" v-model="amount" required>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <label class="font-weight-bold">Payment Slip</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="file" class="form-control" name="payment_slip" id="payment_slip_id" accept="image/png, image/jpeg" @change="imageChange" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="row mb-2">
                                     <div class="col-md-3 offset-md-3">
                                         <label class="font-weight-bold"> Bank Name </label>
                                         <input type="text" class="form-control w-100 m-auto" placeholder="Bank Name" name="bank_n" v-model="bank_name" required>
@@ -63,7 +79,7 @@
                                             <input type="file" class="form-control" name="payment_slip" id="payment_slip_id" accept="image/png, image/jpeg" @change="imageChange">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <button type="submit" class="btn btn-success w-25 text-white font-weight-bold mt-2">Submit</button>
                             </form>
                         </div>
@@ -181,17 +197,17 @@
 
                         var payment = document.querySelector('#payment_slip_id');
                         formData.append('payment_slip', payment.files[0]);
-                        formData.append('bank_name', this.bank_name);
-                        formData.append('ref_no', this.ref_no);
+                        // formData.append('bank_name', this.bank_name);
+                        // formData.append('ref_no', this.ref_no);
                         formData.append('amount', parseInt(fixAmount, 10));
-                        formData.append('time_deposited', this.time_deposited);
+                        // formData.append('time_deposited', this.time_deposited);
                         formData.append('res_no', this.res_no);
 
                         axios.post('//' + window.location.host + '/booking/savePayment', formData)
                             .then(() => {
                                 setTimeout(() => {
                                     loader.hide()
-                                },1000)
+                                },500)
                                 Swal.fire(
                                     'Success!',
                                     'Your Deposit Slip has been submitted. Kindly check your email from time to time to check its status.',
@@ -216,9 +232,10 @@
                                 setTimeout(() => {
                                     loader.hide()
                                 },10)
+                                console.log(response)
                                 Swal.fire(
                                     'Failed!',
-                                    'Reservation Number Not Found.',
+                                    'Reservation Number not found.',
                                     'error'
                                 )
                             });

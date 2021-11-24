@@ -56,8 +56,11 @@
                                 {{ formatNumber(item.payment) }}
                             </template>
                             <template v-slot:item.is_paid="{ item }">
-                                <div v-if="item.is_paid == 0">
+                                <div v-if="item.is_paid == 0 && item.payment == 0">
                                     Unpaid
+                                </div>
+                                <div v-else-if="item.is_paid == 0 && item.payment != 0">
+                                    Incomplete
                                 </div>
                                 <div v-else>
                                     Paid
@@ -325,7 +328,7 @@
                     { text: 'Payment', value: 'payment', class: 'text-center' },
                     { text: 'Remaining', value: 'remaining', class: 'text-center' },
                     { text: 'Status', value: 'is_paid', class: 'text-center' },
-                    { text: 'Action', value: 'actions', class: 'text-center' },
+                    { text: 'Action', value: 'actions', class: 'text-center w-15'},
                 ],
                 res_upcoming: [],
                 res_ongoing: [],

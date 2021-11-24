@@ -16,7 +16,11 @@ class DepositRepository
 {
     public function getDeposit()
     {
-        return Deposit::with('reservation')
+        return Deposit::with(['reservation' => function ($query) {
+            $query->with(['reservation_details' => function ($q) {
+                $q->with('rooms');
+            }]);
+        }])
             ->where('isAcknowledged', 0)
             ->where('isActive', 1)
             ->orderBy('created_at', 'ASC')

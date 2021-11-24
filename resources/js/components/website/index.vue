@@ -1,10 +1,10 @@
 <template>
     <div>
         <img src="images/feet.jpg" style="margin-top:-100px; width:100%;" class="cover-image">
-        <div class="book-now-container text-center p-4">
+        <div class="book-now-container text-center">
             <h5 class="font-weight-bold font-white mb-4">Looking for a great place to stay?</h5>
             <a :href="'/booking'" style="text-decoration: none; color: black !important">
-                <button type="button" class="btn btn-primary w-75 ml-1 button-book font-weight-bold" style="font-size: 14px !important; background-color: white"> BOOK NOW </button>
+                <button type="button" class="btn btn-primary w-75 ml-1 button-book font-weight-bold p-4" style="font-size: 14px !important; background-color: white"> BOOK NOW </button>
             </a>
         </div>
 
@@ -131,7 +131,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="openModalLabel" aria-hidden="true">
+        <div class="modal fade" id="openModal" tabindex="-1" role="dialog" aria-labelledby="openModalLabel" aria-hidden="true" style="z-index: 999999999">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-body p-4">

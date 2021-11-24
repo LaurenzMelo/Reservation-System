@@ -46,7 +46,7 @@ class ReportController extends Controller
 
         $query->leftJoin('reservation_details', 'reservation_details.reservation_id', '=', 'reservations.id');
 
-        $result = $query->whereBetween('reservation_details.start_date', [$start_date, $end_date])->get();
+        $result = $query->whereBetween('reservation_details.start_date', [$start_date, $end_date])->distinct()->get();
 
         $headers = array(
             "Content-type" => "text/csv",

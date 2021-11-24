@@ -42,7 +42,7 @@ Route::group(['prefix' => '/'], function () {
     });
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 
 Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {

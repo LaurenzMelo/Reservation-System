@@ -1,145 +1,9 @@
 <template>
     <div>
-        <div class="mt-4">
-            <form-wizard title="Room Reservation" @on-complete="createReservation" shape="circle" subtitle="Reserve a room for your trip!" color="#68A6BF" error-color="#ff4949">
+        <div style="padding-top: 125px;">
+            <form-wizard title="Room Reservation" ref="formWiz" @on-complete="createReservation" shape="circle" subtitle="Reserve a room for your trip!" color="#68A6BF" error-color="#ff4949">
                 <tab-content title="Find A Room" :before-change="firstValidation">
-                    <div class="row mb-2">
-                        <div class="col-md-12" v-if="booked.length != 0">
-                            <h3 class="font-weight-bold font-oswald">Chosen Rooms</h3>
-                            <hr style="width:5%; margin-top:3px; border-top:3px solid #68A6BF">
-                            <div class="row">
-                                <div class="col-md-6" v-for="book in booked">
-                                    <div class="col-md-12 border shadow p-4">
-                                        <div class="row">
-                                            <div class="col-md-8" style="border-right: 3px solid #68A6BF">
-                                                <h5 class="font-weight-bold mb-2">{{ book.name }}</h5>
-                                                <div class="ml-1 mb-1">
-                                                    ⎇ <span class="font-weight-bold"> Amenities: </span> {{ JSON.parse(book.amenities) }}
-                                                </div>
-                                                <div class="ml-1">
-                                                    ⎇ <span class="font-weight-bold"> Capacity: </span> {{ book.capacity }} Person(s)
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 pt-0 pr-0">
-                                                <div class="text-right mb-2"><button type="button" class="btn btn-sm btn-danger font-white m-0" @click="removeRoom(book)"><i class="fas fa-minus"></i></button></div>
-                                                <div class="d-flex justify-content-between">
-                                                    Price Per Night: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount - (book.amount * 0.12)) }} </span>
-                                                </div>
-                                                <div class="d-flex justify-content-between">
-                                                    Tax & Fees: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount * 0.12) }} </span>
-                                                </div>
-                                                <hr>
-                                                <div class="d-flex justify-content-between">
-                                                    Total Amount: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount) }} </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="col-md-12 border p-4 shadow">
-                                <h4 class="font-weight-bold text-center mb-4 font-oswald"> Initial Information </h4>
-                                <v-date-picker
-                                    v-model="check_date"
-                                    is-range
-                                    :masks="masks"
-                                    color="blue"
-                                    is-dark
-                                    :min-date="new Date()"
-                                    class="mt-1"
-                                >
-                                    <template v-slot="{ inputValue, inputEvents }">
-                                        <div class="form-group">
-                                            <label class="font-weight-bold"> Check In Date: </label>
-                                            <input
-                                                :value="inputValue.start"
-                                                v-on="inputEvents.start"
-                                                class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
-                                                placeholder="Check In"
-                                            />
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="font-weight-bold"> Check Out Date: </label>
-                                            <input
-                                                :value="inputValue.end"
-                                                v-on="inputEvents.end"
-                                                class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
-                                                placeholder="Check Out"
-                                                :min-date="new Date()"
-                                            />
-                                        </div>
-                                    </template>
-                                </v-date-picker>
-                                <div class="text-center">
-                                    <button type="button" @click="getVacantRooms()" class="btn btn-lg mt-2 text-center font-weight-bold text-white" style="background-color: #68A6BF"> Apply </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="col-md-12">
-                                <div v-for="room in filtered_rooms" style="margin-bottom:2rem">
-                                    <div class="row border shadow">
-                                        <div class="col-md-4 font-small">
-                                            <div v-if="room.image != null">
-                                                <img class="room-img" :src="room.image" style="max-width: 100%; max-height:100%">
-                                            </div>
-                                            <div v-else class="text-center">
-                                                <img class="product-img" src="images/rooms/placeholder.png" style="max-width: 100%; max-height:100%">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 font-small">
-                                            <h5 class="font-weight-bold mt-2">{{ room.name }}</h5>
-                                            <p class="text-indent-sentence text-justify">{{ room.description }}</p>
-                                            <h6 class="mt-2"><span class="font-weight-bold">Room Capacity: </span> {{ room.capacity }}</h6>
-
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h5 class="font-weight-bold mt-2 text-center">Amenities & Inclusions</h5>
-                                            <ul class="ml-5">
-                                                <li v-for="text in JSON.parse(room.amenities)">
-                                                    {{ text }}
-                                                </li>
-                                            </ul>
-                                            <hr class="w-75 m-auto">
-                                            <h5 class="font-weight-bold mt-2 text-center">Rate Per Night</h5>
-                                            <p class="text-center font-weight-bold font-med">{{ formatNumber(room.amount) }}</p>
-                                            <p class="text-center">{{ formatNumber(room.amount - (room.amount * 0.12)) }} + {{ formatNumber(room.amount * 0.12) }} (Tax & Fees)</p>
-                                            <button type="button" class="btn btn-primary text-white w-100" data-toggle="modal" data-target="#guestModal" @click="toggleGuest(room)"> Book </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"> Book {{ selected_toggle.name }} </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form @submit.prevent="bookRoom(selected_toggle)">
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <div class="font-weight-bold"> Please Enter Number of Guest: </div>
-                                                <input type="number" class="form-control" v-model="specific_guests_no" placeholder="No. Of Guest(s)" required>
-                                                <div style="color:red; font-size: 10px"> Maximum of {{ selected_toggle.capacity }} </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success text-white"> Book </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </tab-content>
                 <tab-content title="Fill Up Information">
                     <div class="container mb-2">
@@ -177,8 +41,12 @@
                                             <input type="text" class="form-control" placeholder="e.g. 09123456789" v-model="form.contact_no" name="contact_no">
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold"> Time of Arrival <span v-if="form.requests == ''" class="font-weight-bold" style="color:red">*</span></label>
-                                            <textarea class="form-control" rows="4" v-model="form.requests" placeholder="Time of Arrival & other requests" name="requests"></textarea>
+                                            <label class="font-weight-bold mr-4"> Time Of Arrival <span v-if="form.time_arrival == ''" class="font-weight-bold" style="color:red">*</span></label>
+                                            <v-date-picker mode="time" v-model="form.time_arrival" :timezone="timezone" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold"> Other Requests <span v-if="form.requests == ''" class="font-weight-bold" style="color:red">*</span></label>
+                                            <textarea class="form-control" rows="4" v-model="form.requests" placeholder="Other requests" name="requests"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +112,11 @@
                                     <div><span class="font-weight-bold">Contact Number:</span> {{ form.contact_no }}</div>
                                     <hr>
                                     <div>
-                                        <span class="font-weight-bold"> Arrival Time & Other Requests: </span>
+                                        <span class="font-weight-bold"> Arrival Time: </span>
+                                        <p class="text-justify text-indent-sentence">{{ formatTime(form.time_arrival) }} </p>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold"> Other Requests: </span>
                                         <p class="text-justify text-indent-sentence">{{ form.requests }} </p>
                                     </div>
                                 </div>
@@ -253,6 +125,145 @@
                     </div>
                 </tab-content>
             </form-wizard>
+            <div class="pl-4 pr-4">
+                <div id="choose_rooms" class="row mb-2">
+                    <div class="col-md-12" v-if="booked.length != 0">
+                        <h3 class="font-weight-bold font-oswald">Chosen Rooms</h3>
+                        <hr style="width:5%; margin-top:3px; border-top:3px solid #68A6BF">
+                        <div class="row">
+                            <div class="col-md-6" v-for="book in booked">
+                                <div class="col-md-12 border shadow p-4">
+                                    <div class="row">
+                                        <div class="col-md-8" style="border-right: 3px solid #68A6BF">
+                                            <h5 class="font-weight-bold mb-2">{{ book.name }}</h5>
+                                            <div class="ml-1 mb-1">
+                                                ⎇ <span class="font-weight-bold"> Amenities: </span> {{ JSON.parse(book.amenities) }}
+                                            </div>
+                                            <div class="ml-1">
+                                                ⎇ <span class="font-weight-bold"> Capacity: </span> {{ book.capacity }} Person(s)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 pt-0 pr-0">
+                                            <div class="text-right mb-2"><button type="button" class="btn btn-sm btn-danger font-white m-0" @click="removeRoom(book)"><i class="fas fa-minus"></i></button></div>
+                                            <div class="d-flex justify-content-between">
+                                                Price Per Night: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount - (book.amount * 0.12)) }} </span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                Tax & Fees: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount * 0.12) }} </span>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between">
+                                                Total Amount: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount) }} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-md-12 border p-4 shadow">
+                            <h4 class="font-weight-bold text-center mb-4 font-oswald"> Initial Information </h4>
+                            <v-date-picker
+                                v-model="check_date"
+                                is-range
+                                :masks="masks"
+                                color="blue"
+                                is-dark
+                                :min-date="add_date"
+                                class="mt-1"
+                            >
+                                <template v-slot="{ inputValue, inputEvents }">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold"> Check In Date: </label>
+                                        <input
+                                            :value="inputValue.start"
+                                            v-on="inputEvents.start"
+                                            class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
+                                            placeholder="Check In"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="font-weight-bold"> Check Out Date: </label>
+                                        <input
+                                            :value="inputValue.end"
+                                            v-on="inputEvents.end"
+                                            class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
+                                            placeholder="Check Out"
+                                            :min-date="new Date()"
+                                        />
+                                    </div>
+                                </template>
+                            </v-date-picker>
+                            <div class="text-center">
+                                <button type="button" @click="getVacantRooms()" class="btn btn-lg mt-2 text-center font-weight-bold text-white" style="background-color: #68A6BF"> Apply </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="col-md-12">
+                            <div v-for="room in filtered_rooms" style="margin-bottom:2rem">
+                                <div class="row border shadow">
+                                    <div class="col-md-4 font-small">
+                                        <div v-if="room.image != null">
+                                            <img class="room-img" :src="room.image" style="max-width: 100%; max-height:100%">
+                                        </div>
+                                        <div v-else class="text-center">
+                                            <img class="product-img" src="images/rooms/placeholder.png" style="max-width: 100%; max-height:100%">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 font-small">
+                                        <h5 class="font-weight-bold mt-2">{{ room.name }}</h5>
+                                        <p class="text-indent-sentence text-justify">{{ room.description }}</p>
+                                        <h6 class="mt-2"><span class="font-weight-bold">Room Capacity: </span> {{ room.capacity }}</h6>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="font-weight-bold mt-2 text-center">Amenities & Inclusions</h5>
+                                        <ul class="ml-5">
+                                            <li v-for="text in JSON.parse(room.amenities)">
+                                                {{ text }}
+                                            </li>
+                                        </ul>
+                                        <hr class="w-75 m-auto">
+                                        <h5 class="font-weight-bold mt-2 text-center">Rate Per Night</h5>
+                                        <p class="text-center font-weight-bold font-med">{{ formatNumber(room.amount) }}</p>
+                                        <p class="text-center">{{ formatNumber(room.amount - (room.amount * 0.12)) }} + {{ formatNumber(room.amount * 0.12) }} (Tax & Fees)</p>
+                                        <button type="button" class="btn btn-primary text-white w-100" data-toggle="modal" data-target="#guestModal" @click="toggleGuest(room)"> Book </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"> Book {{ selected_toggle.name }} </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form @submit.prevent="bookRoom(selected_toggle)">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="font-weight-bold"> Please Enter Number of Guest: </div>
+                                            <input type="number" class="form-control" v-model="specific_guests_no" placeholder="No. Of Guest(s)" required>
+                                            <div style="color:red; font-size: 10px"> Maximum of {{ selected_toggle.capacity }} </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success text-white"> Book </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -277,6 +288,8 @@
                 nights_stay: 0,
                 total_amount: 0,
                 isLoading: false,
+                add_date: new Date().getTime() + 172800000,
+                step: 1,
                 form: {
                     first_name: '',
                     last_name: '',
@@ -284,7 +297,9 @@
                     retype_email: '',
                     contact_no: '',
                     requests: '',
+                    time_arrival: new Date(),
                 },
+                timezone: '',
                 masks: {
                     input: 'MMM DD YYYY',
                 },
@@ -293,8 +308,10 @@
         watch: {
             check_date: function (val) {
                 //First computation of nights stay
-                this.check_in = moment(this.check_date['start']).format('MMM. DD, YYYY');
+                this.check_in = moment(this.check_date['start']).format('MMM. DD, YYYY')
                 this.check_out = moment(this.check_date['end']).format('MMM. DD, YYYY')
+
+                this.form.time_arrival = moment(this.check_date['start']).format('YYYY-MM-DD 14:00:00')
 
                 if(this.check_in == this.check_out) {
                     Swal.fire({
@@ -322,6 +339,9 @@
             }
         },
         methods: {
+            prevButt(){
+                console.log('clicked')
+            },
             toggleGuest(room) {
                 this.selected_toggle = room;
             },
@@ -344,6 +364,7 @@
                             requests: this.form.requests,
                             check_in: moment(this.check_date['start']).format('YYYY-MM-DD 14:00:00'),
                             check_out: moment(this.check_date['end']).format('YYYY-MM-DD 12:00:00'),
+                            time_arrival: this.form.time_arrival,
                             amount: this.total_amount,
                             guest_no: this.guests_no,
                             rooms: this.booked,
@@ -378,11 +399,11 @@
                         timer: 2000
                     })
                     this.specific_guests_no = '';
-                } else if(parseFloat(this.specific_guests_no) == 0) {
+                } else if(parseFloat(this.specific_guests_no) <= 0) {
                     Swal.fire({
                         position: 'center',
                         icon: 'error',
-                        title: 'No. of guest(s) cannot be zero (0)',
+                        title: 'No. of guest(s) cannot be negative or zero (0)',
                         showConfirmButton: false,
                         timer: 2000
                     })
@@ -427,22 +448,7 @@
                     })
                     return false;
                 } else {
-                    /*var numberOfCapacity = 0;
-                    for(let i = 0; i < this.booked.length; i++) {
-                        numberOfCapacity += parseFloat(this.booked[i].capacity)
-                    }
-                    if(this.guests_no > numberOfCapacity) {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'error',
-                            title: 'Room Capacity cannot accommodate your number of guest(s).',
-                            showConfirmButton: false,
-                            timer: 2500
-                        })
-                        return false;
-                    } else {
-                        return true;
-                    }*/
+                    this.step++;
                     return true;
                 }
             },
@@ -471,9 +477,25 @@
             formatNumber(num) {
                 return '₱' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             },
+            formatTime(time) {
+                return moment(time).format('h:mm a');
+            }
         },
         mounted() {
+            this.$watch(
+                () => {
+                    return this.$refs.formWiz.activeTabIndex
+                },
+                (val) => {
+                    const room_get = document.getElementById('choose_rooms');
 
+                    if (val == 1) {
+                        room_get.classList.add('d-none')
+                    } else if (val == 0) {
+                        room_get.classList.remove('d-none')
+                    }
+                }
+            )
         }
     }
 </script>

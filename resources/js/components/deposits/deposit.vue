@@ -109,17 +109,42 @@
                     <div class="modal-body">
                         <div class="row text-center">
                             <div class="col-md-3">
-                                <label class="font-weight-bold"> Bank: </label>
-                                <span>{{ selected.bank }}</span>
+                                <label class="font-weight-bold"> Guest Name: </label>
+                                <span>{{ selected.reservation.full_name }}</span>
                             </div>
                             <div class="col-md-6">
-                                <label class="font-weight-bold"> Time Deposited: </label>
-                                <span>{{ selected.time_deposited }}</span><br>
+                                <label class="font-weight-bold"> Email: </label>
+                                <span>{{ selected.reservation.email }}</span><br>
                             </div>
                             <div class="col-md-3">
                                 <label class="font-weight-bold"> Amount: </label>
                                 <span>{{ selected.amount }}</span>
                             </div>
+                        </div>
+                        <div class="row text-center mb-2">
+                            <div class="col-md-3">
+                                <label class="font-weight-bold"> Time Of Arrival: </label>
+                                <span>{{ formatTime(selected.reservation.time_arrival) }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="font-weight-bold"> Request(s): </label>
+                                <span>{{ selected.reservation.requests }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="font-weight-bold"> Contact No.: </label>
+                                <span>{{ selected.reservation.contact_no }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="font-weight-bold"> No. Of Guest(s): </label>
+                                <span>{{ selected.reservation.guest_no }}</span>
+                            </div>
+                        </div>
+                        <hr style="width: 25%; margin: auto">
+                        <div class="col-md-12 text-center mb-2 mt-2">
+                            <h6 class="font-weight-bold"> Rooms </h6>
+                            <li v-for="room in selected.reservation.reservation_details" :key="room.id">
+                                {{ room.rooms.name }}
+                            </li>
                         </div>
                         <hr>
                         <div class="text-center">
@@ -299,6 +324,9 @@
                     
                 })
             },
+            formatTime(time) {
+                return moment(time).format('h:mm a');
+            }
         },
         computed: {
             getDeposit() {

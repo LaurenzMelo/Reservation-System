@@ -18,6 +18,7 @@ class ReservationRepository
 {
     public function createReservation($request)
     {
+        // dd($request->all());
         $date_tomorrow = Carbon::now()->addDays(3)->setTimezone('Singapore');
 
         $reservation_no = Carbon::now()->format("Ymd") . mt_rand(1000, 9999);
@@ -30,6 +31,7 @@ class ReservationRepository
         $r->contact_no = $request->contact_no;
         $r->requests = $request->requests;
         $r->amount = $request->amount;
+        $r->time_arrival = $request->time_arrival;
         $r->guest_no = $request->guest_no;
         $r->is_active = 1;
         $r->expiry_date = $date_tomorrow;
@@ -67,7 +69,7 @@ class ReservationRepository
             $mail->isHTML(true);
             $mail->Subject = 'Reservation in Sand Bar Beach Resort';
             $mail->Body    = 'Good day! If you received this email, then you have been successfully make a reservation to
-                <b>Sand Bar Beach Resort!</b> Your reservation number is ' .  '<b>' . $reservation_no . '</b>. Your total remaining balance
+                <b>Sand Bar Beach Resort!</b> Your reservation number is ' .  '<b>' . $reservation_no . '</b>. The total amount to be paid
                 is <b>' . $this->asPeso(floatval($request->amount)) . '</b>.To make a payment,you can deposit to our
                 <b>BPI Account - 102035023052 - Sand Bar Beach Resort</b>. After making a deposit, be sure that you
                 will visit our site to send us the picture of deposit slip.
@@ -75,18 +77,18 @@ class ReservationRepository
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 72 hours to complete your payment. We require 50% Downpayment for the reservation.
+                <br><br>Please be reminded that you will be only given 48 hours to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->AltBody = 'Good day! If you received this email, then you have been successfully make a reservation to
-                Sand Bar Beach Resort! Your reservation number is ' . $reservation_no . '.  Your total remaining balance
+                Sand Bar Beach Resort! Your reservation number is ' . $reservation_no . '.  The total amount to be paid
                 is ' . $this->asPeso(floatval($request->amount)) . '.To make a payment,you can deposit to our BPI Account - 102035023052 - Sand Bar Beach Resort.
                 After making a deposit, be sure that you will visit our site to send us the picture of deposit slip.
                 <br><br> Here is the steps in sending the picture of your deposit slip.
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 72 hours to complete your payment. We require 50% Downpayment for the reservation.
+                <br><br>Please be reminded that you will be only given 48 hours to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->send();

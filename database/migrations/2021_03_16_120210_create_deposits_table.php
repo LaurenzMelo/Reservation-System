@@ -16,10 +16,7 @@ class CreateDepositsTable extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reservation_id');
-            $table->string('reference_no');
             $table->string('deposit_img');
-            $table->string('bank');
-            $table->string('time_deposited');
             $table->decimal('amount', 10,2);
             $table->boolean('isAcknowledged')->default(0);
             $table->boolean('isActive')->default(1);

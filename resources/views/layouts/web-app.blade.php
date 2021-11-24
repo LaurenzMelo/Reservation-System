@@ -22,7 +22,7 @@
     </head>
     <body>
         <div id="app">
-            <nav class="navbar-reduce-opacity navbar navbar-expand-lg navbar-dark background-color-s">
+            <nav class="navbar-reduce-opacity navbar navbar-expand-lg navbar-dark background-color-s" style="position:fixed; width: 100%; z-index: 999999">
                 <a class="navbar-brand logo-nav" href="{{ route('website.index') }}"><img src="{{url('/images/logo.jpg')}}" height="75" width="75"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

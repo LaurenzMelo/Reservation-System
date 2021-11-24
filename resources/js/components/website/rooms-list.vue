@@ -5,10 +5,8 @@
             <span class="font-weight-bold font-oswald room-header">ROOMS</span>
             <hr style="border-top: 2px solid white; width: 20%; margin:auto; margin-top:20px; margin-bottom:20px">
             <span class="room-desc">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Aliquam quis sem sit amet libero vulputate convallis.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Aliquam quis sem sit amet libero vulputate convallis.
+                Here are the list of rooms that Sand Bar Beach Resort offers.
+                Please take a look and choose what lavishes you!
             </span>
         </div>
         <div class="container pt-5">

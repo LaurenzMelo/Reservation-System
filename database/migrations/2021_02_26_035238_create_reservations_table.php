@@ -24,6 +24,7 @@ class CreateReservationsTable extends Migration
             $table->string('email');
             $table->string('contact_no');
             $table->text('requests');
+            $table->dateTime('time_arrival');
             $table->decimal('payment', 18, 2)->default(0);
             $table->boolean('is_active')->default(1);
             $table->boolean('is_checked_in')->default(0);

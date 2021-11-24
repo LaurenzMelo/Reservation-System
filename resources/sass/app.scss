@@ -139,12 +139,13 @@ ul ul a {
 
 .book-now-container{
     position: absolute !important;
-    top: 450px;
-    right: 10%;
+    top: 260px;
+    right: 35%;
     background-color: rgba(0, 0, 0, 0.8);
-    height:25%;
-    width: 20%;
+    height:35%;
+    width: 30%;
     z-index: 999;
+    padding-top: 5%;
 }
 
 .button-book:hover {
@@ -169,7 +170,7 @@ ul ul a {
 }
 .container-facilities {
     position: absolute !important;
-    top: 50%;
+    top: 30%;
     right: 0%;
     height: 30%;
     width: 30%;
@@ -216,6 +217,10 @@ ul ul a {
     font-size: 1.2rem;
 }
 
+.contact-us-cont {
+    margin-top: 100px;
+}
+
 @media only screen and (max-width: 768px) {
     .cover-image {
         height: 50vh !important;
@@ -238,7 +243,7 @@ ul ul a {
     }
 
     .bg-text {
-        top: 30% !important;
+        top: 25% !important;
         width: 90% !important;
     }
 
@@ -252,7 +257,7 @@ ul ul a {
 
     .container-facilities {
         position: absolute !important;
-        top: 30%;
+        top: 18%;
         left: 60%;
         height: 30%;
         width: 30%;
@@ -268,9 +273,17 @@ ul ul a {
     .footer-container {
         border-right: 0px !important;
     }
+
+    .contact-us-cont {
+        margin-top: 100px !important;
+    }
 }
 
 .text-red {
     color: red;
+}
+
+.w-15 {
+    width: 15%;
 }
 

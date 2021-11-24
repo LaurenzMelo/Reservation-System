@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-6 text-center" style="background-color: white !important">
+            <div class="col-md-6 text-center contact-us-cont" style="background-color: white !important">
                 <div class="text-center w-50 m-auto" style="margin-top:15px !important">
                     <h4 class="font-weight-bold"> Any Questions? </h4>
                     <p>Email us at <span class="font-weight-bold">sandbarbeachresort@gmail.com</span></p>
@@ -11,7 +11,7 @@
                         width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy">
                 </iframe>
             </div>
-            <div class="col-md-6" style="background-color: white !important">
+            <div class="col-md-6 contact-us-cont" style="background-color: white !important">
                 <img src="images/contact-us.jpg" style="height:100%; width: 100%;">
             </div>
         </div>
