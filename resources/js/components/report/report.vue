@@ -51,7 +51,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="amount" id="amount" v-model="res">
+                                    <input v-if="auth.role != 'receptionist'" class="form-check-input" type="checkbox" value="amount" id="amount" v-model="res">
+                                    <input v-else class="form-check-input" type="checkbox" value="amount" id="amount" v-model="res" disabled>
                                     <label class="form-check-label" for="contact_no">
                                         Amount
                                     </label>

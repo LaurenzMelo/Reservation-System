@@ -4,6 +4,7 @@ use App\Http\Controllers\API\DepositController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\ReportController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,5 +68,12 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'report'], function () {
         Route::post('download', [ReportController::class, 'download']);
+    });
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('getReceptionist', [UserController::class, 'getReceptionist']);
+        Route::post('deleteUser', [UserController::class, 'deleteUser']);
+        Route::post('toggleStatus', [UserController::class, 'toggleStatus']);
+        Route::post('addUser', [UserController::class, 'addUser']);
     });
 });

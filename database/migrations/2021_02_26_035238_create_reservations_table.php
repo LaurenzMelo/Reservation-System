@@ -23,13 +23,14 @@ class CreateReservationsTable extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('contact_no');
-            $table->text('requests');
+            $table->text('requests')->nullable();
             $table->dateTime('time_arrival');
             $table->decimal('payment', 18, 2)->default(0);
             $table->boolean('is_active')->default(1);
             $table->boolean('is_checked_in')->default(0);
             $table->boolean('is_checked_out')->default(0);
             $table->dateTime('expiry_date');
+            $table->string('created_by')->nullable();
             $table->timestamps();
         });
     }

@@ -98,9 +98,12 @@
                         <li>
                             <a href="{{ route('change.index') }}">Change Room</a>
                         </li>
-                        @if(Auth::user()->name !== 'Receptionist1')
                         <li>
                             <a href="{{ route('report.index') }}">Reports</a>
+                        </li>
+                        @if(Auth::user()->role !== 'receptionist')
+                        <li>
+                            <a href="{{ route('users.index') }}">Users</a>
                         </li>
                         @endif
                         {{--<li>

@@ -5,6 +5,7 @@ use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\ReservationController;
 use App\Http\Controllers\API\WebsiteController;
 use App\Http\Controllers\API\ReportController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,5 +67,9 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'reports'], function () {
         Route::get('/', [ReportController::class, 'index'])->name('report.index');
+    });
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
     });
 });

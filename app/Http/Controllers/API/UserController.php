@@ -2,8 +2,10 @@
 namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User as ModelsUser;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 class UserController extends Controller
 {
@@ -55,5 +57,42 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], $this-> successStatus);
+    }
+
+    public function index()
+    {
+        return view('pages/users/users');
+    }
+
+    public function getReceptionist() {
+        return ModelsUser::where('role', 'receptionist')->orderBy('name')->get();
+    }
+
+    public function deleteUser(Request $request) {
+        return ModelsUser::where('id', $request->id)->delete();
+    }
+
+    public function toggleStatus(Request $request) {
+        // dd();
+        $status = $request->user['is_enabled'];
+        
+        if($status == 1) {
+            $user = ModelsUser::where('id', $request->user['id'])->update([
+                'is_enabled' => 0
+            ]);
+        } else {
+            $user = ModelsUser::where('id', $request->user['id'])->update([
+                'is_enabled' => 1
+            ]);
+        }
+    }
+
+    public function addUser(Request $request) {
+        $create = ModelsUser::create([
+            'name' => $request->form['name'],
+            'email' => $request->form['recep_email'],
+            'password' => Hash::make($request->form['recep_password']),
+            'role' => 'receptionist'
+        ]);
     }
 }

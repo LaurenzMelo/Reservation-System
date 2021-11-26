@@ -153,9 +153,32 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary text-white" data-dismiss="modal"> Close </button>
-                        <button type="button" class="btn btn-danger text-white" @click="disapprove()"> Disapprove Payment </button>
+                        <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#openReason" @click="openReason()"> Disapprove Payment </button>
                         <button type="button" class="btn btn-primary text-white" @click="approve()"> Approve Payment </button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="openReason" tabindex="-1" role="dialog" aria-labelledby="openReasonLabel" aria-hidden="true" v-if="this.selected.length != 0">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="openReasonLabel"> Reason For Disapproval </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form @submit.prevent="disapprove()">
+                        <div class="modal-body">
+                            <label> Reason: </label>
+                            <textarea class="form-control" rows="4" required v-model="reason"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary text-white" data-dismiss="modal"> Close </button>
+                            <button type="submit" class="btn btn-danger text-white"> Confirm </button>
+                        </div>
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -172,6 +195,7 @@
                 disapproved_deposits: [],
                 selected: [],
                 d_slip: 'Pending',
+                reason: '',
             }
         },
         methods: {
@@ -256,6 +280,7 @@
                             let loader = this.$loading.show();
                         axios.post('api/deposits/disapprovePayment', {
                             selected: this.selected,
+                            reason: this.reason
                         }).then(() => {
                             setTimeout(() => {
                                 loader.hide()

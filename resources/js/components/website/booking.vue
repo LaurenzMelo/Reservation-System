@@ -5,7 +5,7 @@
                 <tab-content title="Find A Room" :before-change="firstValidation">
                     
                 </tab-content>
-                <tab-content title="Fill Up Information">
+                <tab-content title="Fill Up Information" :before-change="secondValidation">
                     <div class="container mb-2">
                         <div class="row">
                             <div class="col-md-8">
@@ -18,12 +18,14 @@
                                                 <div class="form-group">
                                                     <label class="font-weight-bold">First Name <span v-if="form.first_name == ''" class="font-weight-bold" style="color:red">*</span></label>
                                                     <input type="text" class="form-control" placeholder="e.g. Juan" v-model="form.first_name" name="first_name">
+                                                    <span v-if="name_validation == false" style="font-size: 13px; color: red"> Invalid First Name </span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="font-weight-bold">Last Name <span v-if="form.last_name == ''" class="font-weight-bold" style="color:red">*</span></label>
                                                     <input type="text" class="form-control" placeholder="e.g. Dela Cruz" v-model="form.last_name" name="first_name">
+                                                    <span v-if="lastname_validation == false" style="font-size: 13px; color: red"> Invalid Last Name </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -31,14 +33,17 @@
                                         <div class="form-group">
                                             <label class="font-weight-bold">Email <span v-if="form.email == ''" class="font-weight-bold" style="color:red">*</span></label>
                                             <input type="email" class="form-control" placeholder="e.g. juandelacruz@email.com" v-model="form.email" name="email">
+                                            <span v-if="email_validation == false" style="font-size: 13px; color: red"> Invalid Email Address </span>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Retype Email <span v-if="form.retype_email == ''" class="font-weight-bold" style="color:red">*</span></label>
                                             <input type="email" class="form-control" placeholder="e.g. juandelacruz@email.com" v-model="form.retype_email" name="retype_email">
+                                            <span v-if="email2_validation === false" style="font-size: 13px; color: red"> Email Address not matched </span>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Contact Number <span v-if="form.contact_no == ''" class="font-weight-bold" style="color:red">*</span></label>
-                                            <input type="text" class="form-control" placeholder="e.g. 09123456789" v-model="form.contact_no" name="contact_no">
+                                            <input type="text" class="form-control" placeholder="e.g. 09123456789" v-model="form.contact_no" name="contact_no" maxlength="11">
+                                            <span v-if="num_validation === false" style="font-size: 13px; color: red"> Invalid Contact No. </span>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold mr-4"> Time Of Arrival <span v-if="form.time_arrival == ''" class="font-weight-bold" style="color:red">*</span></label>
@@ -59,7 +64,7 @@
                                     <hr>
                                     <div class="mb-3" v-for="book in booked">
                                         <h6>⤐ <span class="font-weight-bold mr-2">{{ book.name }}:</span> {{ formatNumber(book.amount) }}</h6>
-                                        <span> (Per Night) {{ formatNumber(book.amount - (book.amount * 0.12)) }} + (Tax & Fee) {{ formatNumber(book.amount * 0.12) }}</span>
+                                        <span> (Per Night) {{ formatNumber(trueAmount(book.amount)) }} + (Tax & Fee) {{ formatNumber(vatAmount(book.amount)) }}</span>
                                     </div>
                                     <hr>
                                     <div>
@@ -97,7 +102,7 @@
                                     <hr>
                                     <div class="mb-3" v-for="book in booked">
                                         <h6>⤐ <span class="font-weight-bold mr-2">{{ book.name }}:</span> {{ formatNumber(book.amount) }} * {{ nights_stay }} (<span class="font-weight-bold">Price per Night * Night(s) of Stay</span>)</h6>
-                                        <div> <span class="font-weight-bold mr-2">Room Price Breakdown:</span> {{ formatNumber(book.amount - (book.amount * 0.12)) }} + (Tax & Fee) {{ formatNumber(book.amount * 0.12) }}</div>
+                                        <div> <span class="font-weight-bold mr-2">Room Price Breakdown:</span> {{ formatNumber(trueAmount(book.amount)) }} + (Tax & Fee) {{ formatNumber(vatAmount(book.amount)) }}</div>
                                     </div>
                                     <hr>
                                     <h6 class="text-center font-weight-bold"> Total Amount: {{ formatNumber(total_amount) }} </h6>
@@ -146,10 +151,10 @@
                                         <div class="col-md-4 pt-0 pr-0">
                                             <div class="text-right mb-2"><button type="button" class="btn btn-sm btn-danger font-white m-0" @click="removeRoom(book)"><i class="fas fa-minus"></i></button></div>
                                             <div class="d-flex justify-content-between">
-                                                Price Per Night: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount - (book.amount * 0.12)) }} </span>
+                                                Price Per Night: <span class="font-weight-bold mr-2"> {{ formatNumber(trueAmount(book.amount)) }} </span>
                                             </div>
                                             <div class="d-flex justify-content-between">
-                                                Tax & Fees: <span class="font-weight-bold mr-2"> {{ formatNumber(book.amount * 0.12) }} </span>
+                                                Tax & Fees: <span class="font-weight-bold mr-2"> {{ formatNumber(vatAmount(book.amount)) }} </span>
                                             </div>
                                             <hr>
                                             <div class="d-flex justify-content-between">
@@ -229,7 +234,7 @@
                                         <hr class="w-75 m-auto">
                                         <h5 class="font-weight-bold mt-2 text-center">Rate Per Night</h5>
                                         <p class="text-center font-weight-bold font-med">{{ formatNumber(room.amount) }}</p>
-                                        <p class="text-center">{{ formatNumber(room.amount - (room.amount * 0.12)) }} + {{ formatNumber(room.amount * 0.12) }} (Tax & Fees)</p>
+                                        <p class="text-center">{{ formatNumber(trueAmount(room.amount)) }} + {{ formatNumber(vatAmount(room.amount)) }} (Tax & Fees)</p>
                                         <button type="button" class="btn btn-primary text-white w-100" data-toggle="modal" data-target="#guestModal" @click="toggleGuest(room)"> Book </button>
                                     </div>
                                 </div>
@@ -290,6 +295,11 @@
                 isLoading: false,
                 add_date: new Date().getTime() + 172800000,
                 step: 1,
+                name_validation: true,
+                lastname_validation: true,
+                email_validation: true,
+                email2_validation: true,
+                num_validation: true,
                 form: {
                     first_name: '',
                     last_name: '',
@@ -339,6 +349,18 @@
             }
         },
         methods: {
+            numberOnly(id) {
+                // Get element by id which passed as parameter within HTML element event
+                var element = document.getElementById(id);
+                // This removes any other character but numbers as entered by user
+                element.value = element.value.replace(/[^0-9]/gi, "");
+            },
+            trueAmount(amount) {
+                return amount / 1.12; 
+            },
+            vatAmount(amount) {
+                return amount - (amount / 1.12);
+            },
             prevButt(){
                 console.log('clicked')
             },
@@ -453,7 +475,43 @@
                 }
             },
             secondValidation() {
-                return true;
+                if (this.validateName(this.form.first_name) === false || this.form.first_name == '') {
+                    this.name_validation = false
+                } else {
+                    this.name_validation = true
+                }
+
+                if (this.validateName(this.form.last_name) === false || this.form.last_name == '') {
+                    this.lastname_validation = false
+                } else {
+                    this.lastname_validation = true
+                }
+
+                if (this.validateEmail(this.form.email) === false || this.form.email == '') {
+                    this.email_validation = false
+                } else {
+                    this.email_validation = true;
+                }
+
+                if (this.form.email != this.form.retype_email  || this.form.retype_email == '') {
+                    this.email2_validation = false
+                } else {
+                    this.email2_validation = true;
+                }
+
+                if (this.validateNumber(this.form.contact_no) === false || this.form.contact_no == '' || this.form.contact_no.length != '11') {
+                    this.num_validation = false
+                } else {
+                    this.num_validation = true;
+                }
+
+                if (this.name_validation == true && this.lastname_validation == true && this.email_validation == true &&
+                this.email2_validation == true && this.num_validation == true) {
+                    return true;
+                } else {
+                    return false;
+                }
+                
             },
             getVacantRooms() {
                 if(this.check_in == this.check_out) {
@@ -479,6 +537,17 @@
             },
             formatTime(time) {
                 return moment(time).format('h:mm a');
+            },
+            validateEmail(email) {
+                const re = /\S+@\S+\.\S+/
+                return re.test(email)
+            },
+            validateName(name) {
+                var reg = /^[a-zA-Z\s]*$/
+                return reg.test(name);
+            },
+            validateNumber(num) {
+                return /^[0-9]*$/.test(num)
             }
         },
         mounted() {

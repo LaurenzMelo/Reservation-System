@@ -77,14 +77,15 @@
                 axios.get('//' + window.location.host + '/getRoomsWebsite')
                 .then(response => {
                     for(let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].name != 'Villa Family Room 2' ||
-                            response.data[i].name != 'Family Deluxe Room 2' || response.data[i].name != 'Family Deluxe Room 3' ||
-                            response.data[i].name != 'Family Deluxe Room 4' ||response.data[i].name != 'Family Regular Room 2' ||
-                            response.data[i].name != 'Standard Room 2' || response.data[i].name != 'Standard Room 3' ||
-                            response.data[i].name != 'Standard Room 4' || response.data[i].name != 'Standard Room 5' ||
-                            response.data[i].name != 'Standard Room 6' || response.data[i].name != 'Standard Room 7' ||
-                            response.data[i].name != 'Standard Room 8' || response.data[i].name != 'Twin Room 2')
+                        if (response.data[i].name != 'Villa Family Room 2' &&
+                            response.data[i].name != 'Family Deluxe Room 2' && response.data[i].name != 'Family Deluxe Room 3' &&
+                            response.data[i].name != 'Family Deluxe Room 4' && response.data[i].name != 'Family Regular Room 2' &&
+                            response.data[i].name != 'Standard Room 2' && response.data[i].name != 'Standard Room 3' &&
+                            response.data[i].name != 'Standard Room 4' && response.data[i].name != 'Standard Room 5' &&
+                            response.data[i].name != 'Standard Room 6' && response.data[i].name != 'Standard Room 7' &&
+                            response.data[i].name != 'Standard Room 8' && response.data[i].name != 'Twin Room 2')
                         {
+                            console.log(response.data[i].name);
                             this.rooms.push(response.data[i]);
                         }
                     }

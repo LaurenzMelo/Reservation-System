@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '20',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/dormitory.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Water Dispenser, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '10',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/villa.jpg',
             'amenities' => '["Airconditioned Room, Kitchenware, Bathroom, Television, Refrigerator, Water Dispenser, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '10',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/villa.jpg',
             'amenities' => '["Airconditioned Room, Kitchenware, Bathroom, Television, Refrigerator, Water Dispenser, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family_deluxe.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family_deluxe.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family_deluxe.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family_deluxe.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -116,7 +116,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -129,7 +129,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '6',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/family.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -142,7 +142,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -155,7 +155,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -168,7 +168,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -181,7 +181,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -194,7 +194,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -207,7 +207,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -220,7 +220,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -233,7 +233,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '4',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/standard.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -241,12 +241,12 @@ class DatabaseSeeder extends Seeder
 
         $room18 = Room::create([
             'name' => 'Twin Room',
-            'description' => 'Twin Room is perfect for couple that wants to relax as it is also located at the upper level.',
+            'description' => 'Twin Room is perfect for 2 persons that wants to relax as it is also located at the upper level.',
             'amount' => '2800.00',
             'capacity' => '2',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/twin_room.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -254,12 +254,12 @@ class DatabaseSeeder extends Seeder
 
         $room19 = Room::create([
             'name' => 'Twin Room 2',
-            'description' => 'Twin Room is perfect for couple that wants to relax as it is also located at the upper level.',
+            'description' => 'Twin Room is perfect for 2 persons that wants to relax as it is also located at the upper level.',
             'amount' => '2800.00',
             'capacity' => '2',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/twin_room.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Mini Refrigerator, Television, Electric Kettle"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -272,7 +272,7 @@ class DatabaseSeeder extends Seeder
             'capacity' => '2',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/tree_house.jpg',
             'amenities' => '["Airconditioned Room, Bathroom, Television, Electric Kettle, Towels"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -280,12 +280,12 @@ class DatabaseSeeder extends Seeder
 
         $room21 = Room::create([
             'name' => 'Couple Room',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur suscipit neque diam, et pretium lorem maximus a. Curabitur ultricies, dolor et fringilla ultrices, arcu turpis rutrum dolor, vitae posuere metus elit vel turpis.',
+            'description' => 'By the name itself, Couples enjoy our Couple Room the most!',
             'amount' => '3500.00',
             'capacity' => '2',
             'capacity_extend' => '2',
             'is_occupied' => '0',
-            'image' => 'images/rooms/room.jpg',
+            'image' => 'images/rooms/couple.jpg',
             'amenities' => '["Hot Showers, Airconditioned Room"]',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
@@ -295,22 +295,25 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin1',
             'email' => 'superadmin@email.com',
             'password' => Hash::make('sandbarbr'),
+            'role' => 'admin',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
         ]);
 
         $receptionist = User::create([
-            'name' => 'Receptionist1',
+            'name' => 'First Receptionist',
             'email' => 'receptionist@email.com',
             'password' => Hash::make('sandbarbrrecept'),
+            'role' => 'receptionist',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
         ]);
 
         $receptionist2 = User::create([
-            'name' => 'Receptionist1',
+            'name' => 'Second Receptionist',
             'email' => 'receptionist2@email.com',
             'password' => Hash::make('receptsandbarbr2'),
+            'role' => 'receptionist',
             'created_at' => '2021-04-24 13:08:00',
             'updated_at' => '2021-04-24 13:08:00'
         ]);

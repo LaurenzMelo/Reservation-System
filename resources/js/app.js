@@ -51,6 +51,7 @@ Vue.component('deposit', require('./components/deposits/deposit.vue').default);
 Vue.component('reservation', require('./components/reservation/reservation.vue').default);
 Vue.component('change-rooms', require('./components/rooms/change-rooms.vue').default);
 Vue.component('report', require('./components/report/report.vue').default);
+Vue.component('users', require('./components/users/users.vue').default);
 
 
 Vue.component('index', require('./components/website/index.vue').default);
@@ -64,5 +65,9 @@ Vue.component('booking-details', require('./components/website/booking-details.v
 
 const app = new Vue({
     el: '#app',
-    vuetify: new Vuetify(),
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+          },
+    }),
 });

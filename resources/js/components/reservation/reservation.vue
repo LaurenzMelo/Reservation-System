@@ -62,6 +62,9 @@
                                 <div v-else-if="item.is_paid == 0 && item.payment != 0">
                                     Incomplete
                                 </div>
+                                <div v-else-if="item.is_paid == 0 && item.payment != 0">
+                                    Needs refund
+                                </div>
                                 <div v-else>
                                     Paid
                                 </div>
@@ -263,15 +266,19 @@
                                         <p class="text-indent-sentence">{{ rooms.rooms.name }} - {{ formatNumber(rooms.rooms.amount) }} * {{ nights_stay }} (Nights of Stay)</p>
                                     </div>
                                 </div>
-                                <div class="form-group ml-4 d-flex justify-content-around">
-                                    <div>
-                                        <label class="font-weight-bold"> Total Amount </label>
-                                        <p> {{ formatNumber(selected.amount) }} </p>
+                                <div class="form-group ml-4">
+                                    <div class="row">
+                                         <div class="col-md-6 text-center">
+                                            <label class="font-weight-bold"> Total Amount </label>
+                                            <p> {{ formatNumber(selected.amount) }} </p>
+                                        </div>
+                                        <div class="col-md-6 text-center">
+                                            <label class="font-weight-bold"> Balance </label>
+                                            <p> {{ formatNumber(selected.amount - total_payment) }} </p>
+                                            <span v-if="selected.amount < total_payment" style="color: red; font-size: 13px"> Negative Balance means that we have to refund it. </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label class="font-weight-bold"> Balance </label>
-                                        <p> {{ formatNumber(selected.amount - total_payment) }} </p>
-                                    </div>
+                                   
                                 </div>
                                 <hr>
                                 <div class="form-group ml-4">

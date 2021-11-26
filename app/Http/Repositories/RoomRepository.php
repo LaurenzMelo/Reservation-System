@@ -19,7 +19,7 @@ class RoomRepository
 
     public function getRoomsWebsite()
     {
-        return Room::all();
+        return Room::orderBy('capacity', 'ASC')->get();
     }
 
     public function getVacantRooms($request)

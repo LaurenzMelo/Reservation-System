@@ -72,7 +72,7 @@ class DepositRepository
         $mail->setFrom('sandbarbeachresort@gmail.com', 'Sand Bar Beach Resort');
         $mail->addAddress($res['email'], $res['first_name'] . ' ' . $res['last_name']);
 
-        if($amount == $res['amount']) {
+        if ($amount >= $res['amount']) {
             $changeResNo = $res['last_name'] . '_' . $res['reservation_no'];
 
             Reservation::where('id', $request->selected['reservation_id'])
@@ -86,13 +86,13 @@ class DepositRepository
                 //Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Payment Success - Sand Bar Beach Resort';
-                $mail->Body    = 'Your Deposit Slip with reference number of <b>' . $request->selected['reference_no'] . '</b> is now approved!
+                $mail->Body    = 'Your Deposit Slip is now approved!
                     Your payment is now complete. Your new booking number is <b>' . $changeResNo . '</b>. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
                     day of your reservation.
                     <br><br> If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
-                $mail->AltBody = 'Your Deposit Slip with reference number of ' . $request->selected['reference_no'] . ' is approved!
+                $mail->AltBody = 'Your Deposit Slip is now approved!
                     Your payment is now complete. Your new booking number is ' . $changeResNo . '. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
                     day of your reservation. If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
@@ -112,12 +112,12 @@ class DepositRepository
                 //Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Payment Success - Sand Bar Beach Resort';
-                $mail->Body    = 'Your Deposit Slip with reference number of <b>' . $request->selected['reference_no'] . '</b> is now approved!
+                $mail->Body    = 'Your Deposit Slip is now approved!
                     However, your payment is not yet complete. Please be reminded that the check in on the resort is at exactly 2:00 pm on the day of your reservation.
                     <br><br> If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
-                $mail->AltBody = 'Your Deposit Slip with reference number of ' . $request->selected['reference_no'] . ' is approved!
+                $mail->AltBody = 'Your Deposit Slip is approved!
                     However, your payment is not yet complete. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
                     day of your reservation. If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
@@ -152,10 +152,10 @@ class DepositRepository
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Payment Failed - Sand Bar Beach Resort';
-            $mail->Body    = 'Your Deposit Slip with reference number of <b>' . $request->selected['reference_no'] . '</b> has been disapproved. If
+            $mail->Body    = 'Your Deposit Slip has been disapproved for the reason of <b>"' . $request->reason . '"</b>. If
                 you think this is a mistake, please email us at sandbarbeachresort@gmail.com or call us 0918-449-5439 for faster response.';
 
-            $mail->AltBody = 'Your Deposit Slip with reference number of ' . $request->selected['reference_no'] . ' has been disapproved. If
+            $mail->AltBody = 'Your Deposit Slip has been disapproved for the reason of <b>"' . $request->reason . '"</b>. If
                 you think this is a mistake, please email us at sandbarbeachresort@gmail.com or call us 0918-449-5439 for faster response.';
 
             $mail->send();
@@ -183,8 +183,8 @@ class DepositRepository
 
         $amount = $res['payment'] - $amount;
 
-        if($res['is_paid'] == 1) {
-            $reservation_no = str_ireplace($res['last_name'] .'_', '', $res['reservation_no']);
+        if ($res['is_paid'] == 1) {
+            $reservation_no = str_ireplace($res['last_name'] . '_', '', $res['reservation_no']);
             Reservation::where('id', $request->selected['reservation_id'])
                 ->update([
                     'payment' => $amount,
@@ -207,7 +207,8 @@ class DepositRepository
             ]);
     }
 
-    public function asPeso($value) {
+    public function asPeso($value)
+    {
         return '₱' . number_format($value, 2);
     }
 }
