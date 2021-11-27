@@ -57,6 +57,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
         Route::post('payCash', [ReservationController::class, 'payCash']);
         Route::post('checkExpiredReservation', [ReservationController::class, 'checkExpiredReservation']);
         Route::post('rebook', [ReservationController::class, 'rebook']);
+        Route::post('addAmenities', [ReservationController::class, 'addAmenities']);
     });
 
     Route::group(['prefix' => 'rooms'], function () {

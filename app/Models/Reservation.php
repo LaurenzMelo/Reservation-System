@@ -35,6 +35,11 @@ class Reservation extends Model
         return $this->hasMany(Deposit::class, 'reservation_id','id');
     }
 
+    public function amenities()
+    {
+        return $this->hasOne(Amenities::class, 'reservation_id','id');
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";

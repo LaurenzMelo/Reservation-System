@@ -125,10 +125,19 @@
                             <div class="col-md-12">
                                 <h5 class="text-center font-weight-bold">Rooms</h5>
                                 <hr class="m-auto" style="border-top:3px solid #68A6BF; width: 5%">
-                                <div v-for="rooms in res_details.reservation_details">
+                                <div v-for="rooms in res_details.reservation_details" :key="rooms.id">
                                     <div class="font-weight-bold"> {{ rooms.rooms.name }} </div>
                                     <p class="text-justify text-indent-sentence"> Capacity: {{ rooms.rooms.capacity }} </p>
-                                    <p class="text-justify text-indent-sentence"> Amenities: {{ JSON.parse(rooms.rooms.amenities) }} </p>
+                                    <p class="text-justify text-indent-sentence"> Inclusions: </p>
+                                    <li v-for="text in JSON.parse(rooms.rooms.amenities)" :key="text.id">
+                                        {{ text }}
+                                    </li>
+                                        <!-- {{ JSON.parse(rooms.rooms.amenities) }}  -->
+                                </div>
+                                <hr>
+                                <div>
+                                    <span class="font-weight-bold"> Arrival Time: </span>
+                                    <p class="text-justify text-indent-sentence">{{ formatTime(res_details.time_arrival) }} </p>
                                 </div>
                             </div>
                         </div>
@@ -269,6 +278,10 @@
                     let date2 = moment(end_date);
                     this.nights_stay = date2.diff(date1, 'days');
                 }).catch(response => {
+                    setTimeout(() => {
+                        loader.hide()
+                    },10)
+
                     Swal.fire(
                         'Failed!',
                         'Reservation Number Not Found.',
@@ -281,7 +294,10 @@
             },
             formatDate(value) {
                 return moment(value).format('MMM. DD, YYYY')
-            }
+            },
+            formatTime(time) {
+                return moment(time).format('h:mm a');
+            },
         },
         mounted() {
 

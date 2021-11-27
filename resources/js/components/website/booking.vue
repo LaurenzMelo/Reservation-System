@@ -548,6 +548,14 @@
             },
             validateNumber(num) {
                 return /^[0-9]*$/.test(num)
+            },
+            getParams() {
+                if(window.location.search.substr(1)) {
+                    const bookingParams = window.location.search.substr(1);
+                    const date = bookingParams.replaceAll('%22', '"');
+                    this.check_date = JSON.parse(date);
+                }
+                // console.log(this.check_date)
             }
         },
         mounted() {
@@ -565,6 +573,10 @@
                     }
                 }
             )
+            // this.getParams();
+        },
+        created() {
+            this.getParams()
         }
     }
 </script>

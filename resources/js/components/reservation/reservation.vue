@@ -62,7 +62,7 @@
                                 <div v-else-if="item.is_paid == 0 && item.payment != 0">
                                     Incomplete
                                 </div>
-                                <div v-else-if="item.is_paid == 0 && item.payment != 0">
+                                <div v-else-if="item.is_paid == 0 && item.payment > 0">
                                     Needs refund
                                 </div>
                                 <div v-else>
@@ -132,8 +132,14 @@
                                 {{ formatNumber(item.payment) }}
                             </template>
                             <template v-slot:item.is_paid="{ item }">
-                                <div v-if="item.is_paid == 0">
+                                <div v-if="item.is_paid == 0  && item.payment == 0">
                                     Unpaid
+                                </div>
+                                <div v-else-if="item.is_paid == 0 && item.payment != 0">
+                                    Incomplete
+                                </div>
+                                <div v-else-if="item.is_paid == 0 && item.payment > 0">
+                                    Needs refund
                                 </div>
                                 <div v-else>
                                     Paid
@@ -141,15 +147,27 @@
                             </template>
                             <template v-slot:item.actions="{ item }">
                                 <button
-                                    class="btn btn-danger btn-sm"
-                                    @click="checkOut(item.id)"
+                                    class="btn btn-success btn-sm"
+                                    v-if="item.amenities == null"
+                                    data-toggle="modal"
+                                    data-target="#addAmenities"
+                                    @click="selectedRes(item)"
                                 >
-                                    <i class="fas fa-door-closed"></i>
+                                    <i class="fas fa-plus"></i>
                                 </button>
                                 <button
                                     class="btn btn-primary btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#viewReservation"
+                                    @click="viewUpcomingRes(item)"
                                 >
                                     <i class="fas fa-eye"></i>
+                                </button>
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    @click="checkOut(item)"
+                                >
+                                    <i class="fas fa-door-closed"></i>
                                 </button>
                             </template>
                         </v-data-table>
@@ -284,7 +302,8 @@
                                 <div class="form-group ml-4">
                                     <label class="font-weight-bold"> Payments Made </label>
                                     <div v-for="payments in selected.deposits">
-                                        <p class="text-indent-sentence">Reference No: {{ payments.reference_no }} </p>
+                                        <p class="text-indent-sentence" v-if="payments.deposit_img == 'Cash'"> Cash </p>
+                                        <p class="text-indent-sentence" v-else> Online </p>
                                         <p class="text-indent-sentence">
                                             {{ payments.bank }} - {{ payments.time_deposited }} - {{ formatNumber(payments.amount) }} -
                                             <span v-if="payments.isAcknowledged == 0"> Unpaid </span> <span v-else> Paid </span>
@@ -297,7 +316,7 @@
                                     <p>{{ formatNumber(total_payment) }}</p>
                                 </div>
                                 <div class="form-group ml-4">
-                                    <label class="font-weight-bold"> Make Payment (In Cash) </label>
+                                    <label class="font-weight-bold" v-if="selected.is_checked_in != 1"> Make Payment (In Cash) </label>
                                     <div class="text-center mt-2" v-if="pay_trigger == true && selected.is_paid == 0">
                                         <label>Payment</label>
                                         <input type="number" min="0" v-model="payment_cash" class="form-control">
@@ -314,6 +333,67 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary text-white" data-dismiss="modal" @click="cancelClick()"> Close </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addAmenities" tabindex="-1" role="dialog" aria-labelledby="addAmenitiesLabel" aria-hidden="true" v-if="selected != []">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAmenitiesLabel"> <b>Add Amenities</b> for Reservation {{ selected.reservation_no }} </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="bed_1" id="bed1" v-model="amenities">
+                            <label class="form-check-label" for="bed1">
+                                Bed 1 - ₱250
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="bed_2" id="bed2" v-model="amenities">
+                            <label class="form-check-label" for="bed2">
+                                Bed 2 - ₱250
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="person_1" id="person1" v-model="amenities">
+                            <label class="form-check-label" for="person1">
+                                Person 1 - ₱250
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="person_2" id="person2" v-model="amenities">
+                            <label class="form-check-label" for="person2">
+                                Person 2 - ₱250
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="karaoke" id="karaoke" v-model="amenities">
+                            <label class="form-check-label" for="karaoke">
+                                Karaoke - ₱100/hr
+                            </label>
+                            <input type="number" v-if="amenities.includes('karaoke')" v-model="karaoke_hrs" class="form-control">
+                            <span v-if="amenities.includes('karaoke')" class="font-weight-bold" style="font-size: 13px"> Karaoke Hours is up to 14 hours only. </span>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="common_kitchen" id="kitchen" v-model="amenities">
+                            <label class="form-check-label" for="kitchen">
+                                Common Kitchen - ₱500
+                            </label>
+                        </div>
+                        <hr>
+                        <div>
+                            Total: <b>₱{{ total_amount }}</b>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary text-white" @click="confirm()"> Confirm </button>
                         <button type="button" class="btn btn-secondary text-white" data-dismiss="modal" @click="cancelClick()"> Close </button>
                     </div>
                 </div>
@@ -349,9 +429,81 @@
                 total_payment: 0,
                 payment_cash: 0,
                 pay_trigger: false,
+                amenities: [],
+                total_amount: 0,
+                karaoke_hrs: 0,
+                karaoke_amount: 0,
+            }
+        },
+        watch: {
+            amenities: function (val) {
+                this.total_amount = 0;
+                for(let i = 0; i < val.length; i++) {
+                    if (val[i] == 'bed_1' || val[i] == 'bed_2' || val[i] == 'person_1' || val[i] == 'person_2') {
+                        this.total_amount += 250;
+                    }
+                    if(val[i] == 'karaoke' && this.karaoke_hrs != 0 ) {
+                        this.total_amount += this.karaoke_hrs * 100
+                    }
+                    if(val[i] == 'common_kitchen') {
+                        this.total_amount += 500;
+                    }
+                }
+            },
+            karaoke_hrs: function (val) {
+                const indexAm = this.amenities.indexOf("karaoke")
+                this.amenities.splice(indexAm, 1)
+                this.amenities.push('karaoke')
             }
         },
         methods: {
+            confirm() {
+                if (this.amenities.length == 0) {
+                    Swal.fire(
+                        'Error',
+                        'Please select amenities.',
+                        'error'
+                    )
+                } else if (this.amenities.includes('karaoke') && this.karaoke_hrs <= 0 || this.karaoke_hrs > 14) {
+                    Swal.fire(
+                        'Error',
+                        'Karaoke hours invalid.',
+                        'error'
+                    )
+                } else {
+                     Swal.fire({
+                        title: 'Confirm Added Amenities?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+                    }).then((result) => {
+                        if (result.value) {
+                            let loader = this.$loading.show();
+                            axios.post('api/reservation/addAmenities', {
+                                id: this.selected.id,
+                                amenities: this.amenities,
+                                total_amount: this.total_amount
+                            }).then(response => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },500)
+                                Swal.fire(
+                                    'Complete!',
+                                    'Amenities Added Successfully.',
+                                    'success'
+                                )
+
+                                // location.reload();
+                            });
+                        }
+                    });
+                }
+            },
+            selectedRes(item) {
+                this.selected = item
+            },
             cancelClick() {
                 this.pay_trigger = false;
                 this.payment_cash = 0;
@@ -402,32 +554,41 @@
             payClick() {
                 this.pay_trigger = true;
             },
-            checkOut(id) {
-                Swal.fire({
-                    title: 'Check Out?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
-                }).then((result) => {
-                    if (result.value) {
-                        let loader = this.$loading.show();
-                        axios.post('api/reservation/checkOut', {
-                            id: id,
-                        }).then(response => {
-                            setTimeout(() => {
-                                loader.hide()
-                            },10)
-                            Swal.fire(
-                                'Complete!',
-                                'Payment Successful',
-                                'success'
-                            )
-                            this.getReservationOngoing();
-                        })
-                    }
-                });
+            checkOut(val) {
+                console.log(val);
+                if(val.is_paid != 1) {
+                    Swal.fire(
+                        'Error',
+                        'Please settle your payment for amenities first.',
+                        'error'
+                    )
+                } else {
+                    Swal.fire({
+                        title: 'Check Out?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+                    }).then((result) => {
+                        if (result.value) {
+                            let loader = this.$loading.show();
+                            axios.post('api/reservation/checkOut', {
+                                id: val.id,
+                            }).then(response => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },500)
+                                Swal.fire(
+                                    'Complete!',
+                                    'Payment Successful',
+                                    'success'
+                                )
+                                this.getReservationOngoing();
+                            })
+                        }
+                    });
+                }
             },
             checkIn(item) {
                 var date_now = moment(Date.now()).format('YYYY-MM-DD 00:00:00');
@@ -472,7 +633,7 @@
                             })
                         }
                     });
-                }
+                } 
             },
             deleteReservation(item) {
                 Swal.fire({
@@ -537,6 +698,7 @@
                             this.res_ongoing.push(response.data[i]);
                         }
                     });
+                console.log(this.res_ongoing);
             },
             getReservationExpired() {
                 this.res_expired = [];
@@ -550,7 +712,6 @@
                     });
             },
             checkExpiredReservation() {
-                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
                 axios.post('api/reservation/checkExpiredReservation', {
                     datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
                 }).then(response => {

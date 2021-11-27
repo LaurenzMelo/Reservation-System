@@ -95,4 +95,9 @@ class ReservationController extends Controller
     {
         return $this->reservationRepository->rebook($request);
     }
+
+    public function addAmenities(Request $request)
+    {
+        return $this->reservationRepository->addAmenities($request);
+    }
 }

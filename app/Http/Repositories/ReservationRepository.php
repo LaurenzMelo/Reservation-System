@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 
 use App\Models\Deposit;
 use App\Models\Reservation;
+use App\Models\Amenities;
 use App\Models\ReservationDetails;
 use Carbon\Carbon;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,7 +21,7 @@ class ReservationRepository
     public function createReservation($request)
     {
         // dd($request->all());
-        $date_tomorrow = Carbon::now()->addDays(3)->setTimezone('Singapore');
+        $date_tomorrow = Carbon::now()->setTimezone('Singapore');
 
         $reservation_no = Carbon::now()->format("Ymd") . mt_rand(1000, 9999);
 
@@ -35,8 +36,7 @@ class ReservationRepository
         $r->time_arrival = $request->time_arrival;
         $r->guest_no = $request->guest_no;
         $r->is_active = 1;
-        $r->expiry_date = $date_tomorrow;
-        $r->created_by = 
+        $r->expiry_date = $this->addDaysWithoutWeeks($date_tomorrow);
         $r->save();
         $rooms = $request->rooms;
 
@@ -166,7 +166,7 @@ class ReservationRepository
 
     public function getReservationOngoing()
     {
-        return Reservation::with(['reservation_details' => function ($q) {
+        return Reservation::with(['amenities', 'reservation_details' => function ($q) {
             $q->with('rooms');
         }, 'deposits'])
             ->where('is_checked_in', 1)
@@ -228,14 +228,23 @@ class ReservationRepository
         ]);
 
         if($new_amount == $res['amount']) {
-            $changeResNo = $res['last_name'] . '_' . $res['reservation_no'];
+            if(!str_contains($res['reservation_no'], $res['last_name'])) {
+                $changeResNo = $res['last_name'] . '_' . $res['reservation_no'];
 
-            return Reservation::where('id', $id)
-                ->update([
-                    'reservation_no' => $changeResNo,
-                    'payment' => $new_amount,
-                    'is_paid' => 1,
-                ]);
+                return Reservation::where('id', $id)
+                    ->update([
+                        'reservation_no' => $changeResNo,
+                        'payment' => $new_amount,
+                        'is_paid' => 1,
+                    ]);
+            } else {
+                return Reservation::where('id', $id)
+                    ->update([
+                        'payment' => $new_amount,
+                        'is_paid' => 1,
+                    ]);
+            }
+            
         } else {
             return Reservation::where('id', $id)
                 ->update([
@@ -316,5 +325,58 @@ class ReservationRepository
 
     public function asPeso($value) {
         return '₱' . number_format($value, 2);
+    }
+
+    public function addAmenities($request) {
+        $a = new Amenities;
+        $a->reservation_id = $request->id;
+        $a->amount = $request->total_amount;
+        
+        if (in_array('bed_1', $request->amenities)) {
+            $a->bed_1 = 1;
+        }
+
+        if (in_array('bed_2', $request->amenities)) {
+            $a->bed_2 = 1;
+        }
+
+        if (in_array('person_1', $request->amenities)) {
+            $a->person_1 = 1;
+        }
+
+        if (in_array('person_2', $request->amenities)) {
+            $a->person_2 = 1;
+        }
+
+        if (in_array('common_kitchen', $request->amenities)) {
+            $a->common_kitchen = 1;
+        }
+
+        if (in_array('karaoke', $request->amenities)) {
+            $a->karaoke = 1;
+        }
+
+        $a->save();
+
+        $res = Reservation::where('id', $request->id)->first();
+
+        if($res->amount + $request->total_amount <= $res->payment) {
+            $re = Reservation::where('id', $request->id)
+            ->update([
+                'amount' => $res->amount + $request->total_amount,
+            ]);
+        } else {
+            $re = Reservation::where('id', $request->id)
+            ->update([
+                'amount' => $res->amount + $request->total_amount,
+                'is_paid' => 0
+            ]);
+        }
+    }
+
+    function addDaysWithoutWeeks($dateTimeString='',$days=0)
+    {
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $dateTimeString, 'Asia/Manila');
+        return $date->addWeekdays(2);
     }
 }

@@ -10,6 +10,49 @@
             </span>
         </div>
         <div class="container pt-5">
+            <div class="col-md-12 mb-5">
+                <h5 class="text-center font-weight-bold mb-4"> Check Available Dates Here </h5>
+                <v-date-picker
+                    v-model="check_date"
+                    is-range
+                    :masks="masks"
+                    color="blue"
+                    is-dark
+                    :min-date="add_date"
+                    class="mt-1"
+                >
+                    <template v-slot="{ inputValue, inputEvents }">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="font-weight-bold"> Check In Date: </label>
+                                    <input
+                                        :value="inputValue.start"
+                                        v-on="inputEvents.start"
+                                        class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
+                                        placeholder="Check In"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="font-weight-bold"> Check Out Date: </label>
+                                    <input
+                                        :value="inputValue.end"
+                                        v-on="inputEvents.end"
+                                        class="border p-2 rounded focus:outline-none focus:border-indigo-300 form-control"
+                                        placeholder="Check Out"
+                                        :min-date="new Date()"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success sub-but-rooms font-white" @click="checkDate"> Submit </button>
+                            </div>
+                        </div>
+                    </template>
+                </v-date-picker>
+            </div>
             <div class="row mb-4 mobile-remove">
                 <div class="col-md-3 offset-md-4 font-weight-bold pb-0 mb-0 font-med">
                     Description
@@ -40,7 +83,7 @@
                         <p class="text-indent-sentence text-justify">{{ room.description }}</p>
                     </div>
                     <div class="col-md-3 font-small" style="border-bottom: 5px solid #68A6BF">
-                        <h6 class="font-weight-bold text-center">Amenities</h6>
+                        <h6 class="font-weight-bold text-center">Inclusions</h6>
                         <ul class="ml-5">
                             <li v-for="text in JSON.parse(room.amenities)">
                                 {{ text }}
@@ -69,10 +112,37 @@
                 masks: {
                     input: 'MMM DD YYYY',
                 },
+                check_date: '',
+                add_date: new Date().getTime() + 172800000,
                 amenities: ['Shower','No Smoking', 'Aircon']
             }
         },
         methods: {
+            checkDate() {
+                const check_in = moment(this.check_date['start']).format('MMM. DD, YYYY')
+                const check_out = moment(this.check_date['end']).format('MMM. DD, YYYY')
+
+                if(this.check_date === '') {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: "Please select a date.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else if (check_in == check_out) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: "Can't pick same day.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    window.location.replace('/booking?' + JSON.stringify(this.check_date));
+                }
+                
+            },
             getRooms() {
                 axios.get('//' + window.location.host + '/getRoomsWebsite')
                 .then(response => {
@@ -85,11 +155,9 @@
                             response.data[i].name != 'Standard Room 6' && response.data[i].name != 'Standard Room 7' &&
                             response.data[i].name != 'Standard Room 8' && response.data[i].name != 'Twin Room 2')
                         {
-                            console.log(response.data[i].name);
                             this.rooms.push(response.data[i]);
                         }
                     }
-                     console.log(this.rooms);
                 })
             },
             formatNumber(num) {
