@@ -298,7 +298,7 @@ class ReservationRepository
 
     public function rebook($request)
     {
-        /*dd($request->all());*/
+        dd($request->all());
         //update amount
         $update = Reservation::where('id', $request->reservation_id)
             ->update(['amount' => $request->total_amount]);

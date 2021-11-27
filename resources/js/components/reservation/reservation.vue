@@ -306,7 +306,7 @@
                                         <p class="text-indent-sentence" v-else> Online </p>
                                         <p class="text-indent-sentence">
                                             {{ payments.bank }} - {{ payments.time_deposited }} - {{ formatNumber(payments.amount) }} -
-                                            <span v-if="payments.isAcknowledged == 0"> Unpaid </span> <span v-else> Paid </span>
+                                            <span v-if="payments.isAcknowledged == 0"> <b>Not</b> Acknowledged </span> <span v-else> Acknowledged </span>
                                         </p>
                                         <hr class="w-50" style="border-top:2px solid #68A6BF;">
                                     </div>
@@ -601,12 +601,6 @@
                         'Please pay the remaining amount first.',
                         'error'
                     )
-                } else if(date_now != date_with_time) {
-                    Swal.fire(
-                        'Unable to Check In',
-                        'The Date of Check In is not met.',
-                        'error'
-                    )
                 } else {
                     Swal.fire({
                         title: 'Check In?',
@@ -634,6 +628,14 @@
                         }
                     });
                 } 
+
+                // else if(date_now != date_with_time) {
+                //     Swal.fire(
+                //         'Unable to Check In',
+                //         'The Date of Check In is not met.',
+                //         'error'
+                //     )
+                // } 
             },
             deleteReservation(item) {
                 Swal.fire({

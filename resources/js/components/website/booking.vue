@@ -42,8 +42,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold">Contact Number <span v-if="form.contact_no == ''" class="font-weight-bold" style="color:red">*</span></label>
-                                            <input type="text" class="form-control" placeholder="e.g. 09123456789" v-model="form.contact_no" name="contact_no" maxlength="11">
-                                            <span v-if="num_validation === false" style="font-size: 13px; color: red"> Invalid Contact No. </span>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <input type="text" class="form-control" value="+639" disabled>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" placeholder="e.g. 123456789" v-model="form.contact_no" name="contact_no" maxlength="9">
+                                                    <span v-if="num_validation === false" style="font-size: 13px; color: red"> Invalid Contact No. </span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold mr-4"> Time Of Arrival <span v-if="form.time_arrival == ''" class="font-weight-bold" style="color:red">*</span></label>
@@ -114,7 +121,7 @@
                                     <hr class="m-auto" style="border-top:3px solid #68A6BF; width: 5%">
                                     <div><span class="font-weight-bold">Full Name:</span> {{ form.first_name }} {{ form.last_name }}</div>
                                     <div><span class="font-weight-bold">Email Address:</span> {{ form.email }}</div>
-                                    <div><span class="font-weight-bold">Contact Number:</span> {{ form.contact_no }}</div>
+                                    <div><span class="font-weight-bold">Contact Number:</span> +639{{ form.contact_no }}</div>
                                     <hr>
                                     <div>
                                         <span class="font-weight-bold"> Arrival Time: </span>
@@ -382,7 +389,7 @@
                             first_name: this.form.first_name,
                             last_name: this.form.last_name,
                             email: this.form.email,
-                            contact_no: this.form.contact_no,
+                            contact_no: '+639' + this.form.contact_no,
                             requests: this.form.requests,
                             check_in: moment(this.check_date['start']).format('YYYY-MM-DD 14:00:00'),
                             check_out: moment(this.check_date['end']).format('YYYY-MM-DD 12:00:00'),
@@ -499,7 +506,7 @@
                     this.email2_validation = true;
                 }
 
-                if (this.validateNumber(this.form.contact_no) === false || this.form.contact_no == '' || this.form.contact_no.length != '11') {
+                if (this.validateNumber(this.form.contact_no) === false || this.form.contact_no == '' || this.form.contact_no.length != '9') {
                     this.num_validation = false
                 } else {
                     this.num_validation = true;

@@ -95,9 +95,9 @@
                             <a href="{{ route('rooms.index') }}">Rooms</a>
                         </li>
 
-                        <li>
+                        <!-- <li>
                             <a href="{{ route('change.index') }}">Change Room</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="{{ route('report.index') }}">Reports</a>
                         </li>
