@@ -658,6 +658,8 @@
                 let min = 111111;
                 let invoice_no = 'CN-' + String(Math.floor(Math.random() * (max - min + 1) + min));
 
+                let balance_due = res.amount - res.payment;
+
                 const doc = new jsPDF()
                 const logo = new Image()
                 logo.src = '/images/logo.png'
@@ -722,7 +724,11 @@
                 doc.setFont('Courier', 'normal');
                 doc.text('Balance Due:', 100, finalY);
                 doc.setFont('Courier', 'bold');
-                doc.text(this.withoutPeso(res.amount - res.payment), 160, finalY)
+                if(balance_due <= 0) {
+                    doc.text(this.withoutPeso(0), 160, finalY)
+                } else {
+                    doc.text(this.withoutPeso(res.amount - res.payment), 160, finalY)
+                }
 
                 finalY += 30
 
