@@ -71,7 +71,7 @@
                                     <hr>
                                     <div class="mb-3" v-for="book in booked">
                                         <h6>⤐ <span class="font-weight-bold mr-2">{{ book.name }}:</span> {{ formatNumber(book.amount) }}</h6>
-                                        <span> (Per Night) {{ formatNumber(trueAmount(book.amount)) }} + (Tax & Fee) {{ formatNumber(vatAmount(book.amount)) }}</span>
+                                        <!-- <span> (Per Night) {{ formatNumber(trueAmount(book.amount)) }} + (Tax) {{ formatNumber(vatAmount(book.amount)) }}</span> -->
                                     </div>
                                     <hr>
                                     <div>
@@ -81,6 +81,7 @@
                                         <i class="fas fa-hotel mr-2"></i> {{ booked.length }} <span v-if="booked.length == 1">Room</span><span v-else>Rooms</span>
                                     </div>
                                     <hr>
+                                    <h6 class="text-center">(Per Night) {{ formatNumber(trueAmount(total_amount)) }} + (Tax) {{ formatNumber(vatAmount(total_amount)) }}</h6>
                                     <h6 class="text-center font-weight-bold"> Total Amount: {{ formatNumber(total_amount) }} </h6>
                                 </div>
                             </div>
@@ -109,9 +110,10 @@
                                     <hr>
                                     <div class="mb-3" v-for="book in booked">
                                         <h6>⤐ <span class="font-weight-bold mr-2">{{ book.name }}:</span> {{ formatNumber(book.amount) }} * {{ nights_stay }} (<span class="font-weight-bold">Price per Night * Night(s) of Stay</span>)</h6>
-                                        <div> <span class="font-weight-bold mr-2">Room Price Breakdown:</span> {{ formatNumber(trueAmount(book.amount)) }} + (Tax & Fee) {{ formatNumber(vatAmount(book.amount)) }}</div>
+                                        <!-- <div> <span class="font-weight-bold mr-2">Room Price Breakdown:</span> {{ formatNumber(trueAmount(book.amount)) }} + (Tax) {{ formatNumber(vatAmount(book.amount)) }}</div> -->
                                     </div>
                                     <hr>
+                                    <h6 class="text-center"> Total Price Breakdown: {{ formatNumber(trueAmount(total_amount)) }} + (Tax) {{ formatNumber(vatAmount(total_amount)) }} </h6>
                                     <h6 class="text-center font-weight-bold"> Total Amount: {{ formatNumber(total_amount) }} </h6>
                                 </div>
                             </div>
@@ -161,7 +163,7 @@
                                                 Price Per Night: <span class="font-weight-bold mr-2"> {{ formatNumber(trueAmount(book.amount)) }} </span>
                                             </div>
                                             <div class="d-flex justify-content-between">
-                                                Tax & Fees: <span class="font-weight-bold mr-2"> {{ formatNumber(vatAmount(book.amount)) }} </span>
+                                                Tax: <span class="font-weight-bold mr-2"> {{ formatNumber(vatAmount(book.amount)) }} </span>
                                             </div>
                                             <hr>
                                             <div class="d-flex justify-content-between">
@@ -241,7 +243,7 @@
                                         <hr class="w-75 m-auto">
                                         <h5 class="font-weight-bold mt-2 text-center">Rate Per Night</h5>
                                         <p class="text-center font-weight-bold font-med">{{ formatNumber(room.amount) }}</p>
-                                        <p class="text-center">{{ formatNumber(trueAmount(room.amount)) }} + {{ formatNumber(vatAmount(room.amount)) }} (Tax & Fees)</p>
+                                        <p class="text-center">{{ formatNumber(trueAmount(room.amount)) }} + {{ formatNumber(vatAmount(room.amount)) }} (Tax)</p>
                                         <button type="button" class="btn btn-primary text-white w-100" data-toggle="modal" data-target="#guestModal" @click="toggleGuest(room)"> Book </button>
                                     </div>
                                 </div>
@@ -368,9 +370,6 @@
             vatAmount(amount) {
                 return amount - (amount / 1.12);
             },
-            prevButt(){
-                console.log('clicked')
-            },
             toggleGuest(room) {
                 this.selected_toggle = room;
             },
@@ -406,13 +405,13 @@
                                 'Your reservation is confirmed. Please check your email address for further details.',
                                 'success'
                             )
-                            const index = async function () {
-                                await new Promise(resolve => {
-                                    setTimeout(resolve, 5000)
-                                })
-                                window.location.replace('/');
-                            }
-                            index();
+                            // const index = async function () {
+                            //     await new Promise(resolve => {
+                            //         setTimeout(resolve, 5000)
+                            //     })
+                            //     window.location.replace('/');
+                            // }
+                            // index();
                         })
                     }
                 })
@@ -535,6 +534,11 @@
                         rooms_no: this.rooms_no,
                         guests_no: this.guests_no,
                     }).then(response => {
+                        if(this.booked.length != 0) {
+                            for (let i = 0; i < this.booked.length; i++) {
+                                this.$delete(this.booked, i);
+                            }
+                        }
                         this.filtered_rooms = response.data.vacant_rooms;
                     })
                 }

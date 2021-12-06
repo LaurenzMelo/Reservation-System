@@ -49,6 +49,9 @@ class ReservationRepository
             ]);
         }
 
+        $check_in = Carbon::parse($request->check_in)->toDateString();
+        $check_out = Carbon::parse($request->check_out)->toDateString();
+
         //Create Email
         $mail = new PHPMailer(true);
 
@@ -75,11 +78,14 @@ class ReservationRepository
                 is <b>' . $this->asPeso(floatval($request->amount)) . '</b>.To make a payment,you can deposit to our
                 <b>BPI Account - 102035023052 - Sand Bar Beach Resort</b>. After making a deposit, be sure that you
                 will visit our site to send us the picture of deposit slip.
+                <br><br>Here is your reservation details:
+                <br>➣ Reservation Date: ' . Carbon::parse($request->check_in)->format('M d Y') . ' to ' . Carbon::parse($request->check_out)->format('M d Y') . '
+                <br>➣ No. of Days: ' . Carbon::parse($check_out)->diffInDays(Carbon::parse($check_in)) . '
                 <br><br> Here is the steps in sending the picture of your deposit slip:
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 2 business days to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
+                <br><br>Please be reminded that you will be only given 2 days to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->AltBody = 'Good day! If you received this email, then you have been successfully make a reservation to
@@ -90,7 +96,7 @@ class ReservationRepository
                 <br>1. Visit our site at sandbarbeachresort.com
                 <br>2. On upper right corner, you can see the "Check Booking". Click and navigate that.
                 <br>3. Choose the Upload Payment Button and fill up necessary information and you are done!
-                <br><br>Please be reminded that you will be only given 2 business days to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
+                <br><br>Please be reminded that you will be only given 2 days to complete your payment. We require 50% Downpayment <b>(' .  $this->asPeso(floatval($request->amount / 2)) . ')</b> for the reservation.
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->send();
@@ -120,6 +126,7 @@ class ReservationRepository
 
     public function savePayment($request)
     {
+        // dd($request->all())
         $payment = null;
         $getResId = Reservation::where('reservation_no', $request->res_no)->pluck('id')->first();
 
@@ -143,8 +150,12 @@ class ReservationRepository
                 'amount' => $request->amount,
                 'isAcknowledged' => 0,
             ]);
+            
+            $amount = Reservation::where('id', $getResId)->pluck('amount')->first();
+            $payment = Reservation :: where('id', $getResId)->pluck('payment')->first();
+            $total_amount = floatval($amount) - floatval($payment);
 
-            return $getResId;
+            return $total_amount;
         } else {
             return response('Reservation Number Not Found', 400);
         }

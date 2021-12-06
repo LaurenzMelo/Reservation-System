@@ -107,35 +107,52 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row text-center">
-                            <div class="col-md-3">
-                                <label class="font-weight-bold"> Guest Name: </label>
+                        <div class="col-md-12 text-center">
+                            <h5 class="font-weight-bold"> {{ check_in }} to {{ check_out }} </h5>
+                            <h6 class="font-weight-bold"> {{ nights_stay }} <span v-if="nights_stay <= 1">Night</span><span v-else>Nights</span></h6>
+                        </div>
+                        <div class="row text-center mb-2">
+                            <div class="col-md-6">
+                                <label class="font-weight-bold"> Guest Name: </label><br>
                                 <span>{{ selected.reservation.full_name }}</span>
                             </div>
                             <div class="col-md-6">
-                                <label class="font-weight-bold"> Email: </label>
-                                <span>{{ selected.reservation.email }}</span><br>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="font-weight-bold"> Amount: </label>
-                                <span>{{ selected.amount }}</span>
+                                <label class="font-weight-bold"> Email: </label><br>
+                                <span>{{ selected.reservation.email }}</span>
                             </div>
                         </div>
-                        <div class="row text-center mb-2">
+                        <hr style="width: 25%; margin: auto">
+                        <div class="row text-center mt-2 mb-2">
+                            <div class="col-md-4">
+                                <label class="font-weight-bold"> Amount to be Paid: </label><br>
+                                <span>{{ formatNumber(selected.reservation.amount) }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="font-weight-bold"> Deposit Amount: </label><br>
+                                <span>{{ formatNumber(selected.amount) }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="font-weight-bold"> Amount Left (After accepting): </label><br>
+                                <span>{{ formatNumber(selected.reservation.amount - selected.amount) }}</span>
+                            </div>
+                        </div>
+                        <hr style="width: 50%; margin: auto">
+                        <div class="row text-center mb-2 mt-2">
                             <div class="col-md-3">
-                                <label class="font-weight-bold"> Time Of Arrival: </label>
+                                <label class="font-weight-bold"> Time Of Arrival: </label> <br>
                                 <span>{{ formatTime(selected.reservation.time_arrival) }}</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="font-weight-bold"> Request(s): </label>
-                                <span>{{ selected.reservation.requests }}</span>
+                                <label class="font-weight-bold"> Request(s): </label> <br>
+                                <span v-if="selected.reservation.requests != null">{{ selected.reservation.requests }}</span>
+                                <span v-else>None</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="font-weight-bold"> Contact No.: </label>
+                                <label class="font-weight-bold"> Contact No.: </label> <br>
                                 <span>{{ selected.reservation.contact_no }}</span>
                             </div>
                             <div class="col-md-3">
-                                <label class="font-weight-bold"> No. Of Guest(s): </label>
+                                <label class="font-weight-bold"> No. Of Guest(s): </label> <br>
                                 <span>{{ selected.reservation.guest_no }}</span>
                             </div>
                         </div>
@@ -172,7 +189,14 @@
                     <form @submit.prevent="disapprove()">
                         <div class="modal-body">
                             <label> Reason: </label>
-                            <textarea class="form-control" rows="4" required v-model="reason"></textarea>
+                            <!-- <textarea class="form-control" rows="4" required v-model="reason"></textarea> -->
+                            <select class="form-control" required v-model="reason">
+                                <option value="" disabled selected> Choose One </option>
+                                <option value="Insufficient Amount"> Insufficient Amount </option>
+                                <option value="Invalid Deposit Slip"> Invalid Deposit Slip </option>
+                                <option value="False Information"> False Information </option>
+                                <option value="Payment Not Received"> Payment Not Received </option>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-white" data-dismiss="modal"> Close </button>
@@ -196,6 +220,9 @@
                 selected: [],
                 d_slip: 'Pending',
                 reason: '',
+                check_in: '',
+                check_out: '',
+                nights_stay: 0,
             }
         },
         methods: {
@@ -303,46 +330,91 @@
                 });
             },
             approve() {
-                Swal.fire({
-                    title: 'Approve Payment?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Confirm'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let loader = this.$loading.show();
-                        axios.post('api/deposits/approvePayment', {
-                            selected: this.selected,
-                        }).then(() => {
-                            setTimeout(() => {
-                                loader.hide()
-                            },10)
-                            Swal.fire(
-                                'Success!',
-                                'Payment Approved',
-                                'success'
-                            )
+                if (this.selected.reservation.amount - this.selected.amount < 0) {
+                    Swal.fire({
+                        title: 'Approve Payment?',
+                        icon: 'question',
+                        text: 'If this will be accepted, we have to refund the client with ' + (this.formatNumber(Math.abs(this.selected.amount - this.selected.reservation.amount))),
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirm'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let loader = this.$loading.show();
+                            axios.post('api/deposits/approvePayment', {
+                                selected: this.selected,
+                            }).then(() => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
+                                Swal.fire(
+                                    'Success!',
+                                    'Payment Approved',
+                                    'success'
+                                )
 
-                            const index = async function () {
-                                await new Promise(resolve => {
-                                    setTimeout(resolve, 1500)
-                                })
-                                location.reload();
-                            }
-                            index();
-                        })
-                    }
-                });
+                                const index = async function () {
+                                    await new Promise(resolve => {
+                                        setTimeout(resolve, 1500)
+                                    })
+                                    location.reload();
+                                }
+                                index();
+                            })
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Approve Payment?',
+                        icon: 'question',
+                        text: "If this will be accepted, the client's remaining balance will be " + this.formatNumber(this.selected.reservation.amount - this.selected.amount),
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirm'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let loader = this.$loading.show();
+                            axios.post('api/deposits/approvePayment', {
+                                selected: this.selected,
+                            }).then(() => {
+                                setTimeout(() => {
+                                    loader.hide()
+                                },10)
+                                Swal.fire(
+                                    'Success!',
+                                    'Payment Approved',
+                                    'success'
+                                )
+
+                                const index = async function () {
+                                    await new Promise(resolve => {
+                                        setTimeout(resolve, 1500)
+                                    })
+                                    location.reload();
+                                }
+                                index();
+                            })
+                        }
+                    });
+                }
             },
             viewSlip(value)
             {
                 this.selected = value;
-                console.log(this.selected);
+                this.check_in = moment(this.selected.reservation.reservation_details[0].start_date).format('MMM. DD, YYYY')
+                this.check_out = moment(this.selected.reservation.reservation_details[0].end_date).format('MMM. DD, YYYY')
+
+                // var date1 = moment(this.selected.reservation.reservation_details[0].start_date);
+                // var date2 = moment(this.selected.reservation.reservation_details[0].end_date);
+                var date1 = moment(this.selected.reservation.reservation_details[0].start_date, 'YYYY-MM-DD');
+                var date2 = moment(this.selected.reservation.reservation_details[0].end_date, 'YYYY-MM-DD');
+                // var date2 = moment()
+                
+                this.nights_stay = date2.diff(date1, 'days');
             },
             checkExpiredReservation() {
-                console.log(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
                 axios.post('api/reservation/checkExpiredReservation', {
                     datetime: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
                 }).then(response => {
@@ -351,7 +423,10 @@
             },
             formatTime(time) {
                 return moment(time).format('h:mm a');
-            }
+            },
+            formatNumber(num) {
+                return '₱' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            },
         },
         computed: {
             getDeposit() {

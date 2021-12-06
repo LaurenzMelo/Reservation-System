@@ -35,7 +35,8 @@
                                 <div class="row mb-4">
                                     <div class="col-md-4">
                                         <label class="font-weight-bold">Reservation Number</label>
-                                        <input type="text" class="form-control w-100 m-auto" placeholder="Input Your Reservation Number Here" name="res_num" v-model="res_no" required>
+                                        <input v-if="cb_holder == ''" type="text" class="form-control w-100 m-auto" placeholder="Input Your Reservation Number Here" name="res_num" v-model="res_no" required>
+                                        <input v-else type="text" class="form-control w-100 m-auto" placeholder="Input Your Reservation Number Here" name="res_num" v-model="res_no" required disabled>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="font-weight-bold"> Amount </label>
@@ -162,6 +163,7 @@
                 ref_no: '',
                 nights_stay: 0,
                 res_details: [],
+                cb_holder: '',
             }
         },
         methods: {
@@ -206,42 +208,43 @@
 
                         var payment = document.querySelector('#payment_slip_id');
                         formData.append('payment_slip', payment.files[0]);
-                        // formData.append('bank_name', this.bank_name);
-                        // formData.append('ref_no', this.ref_no);
                         formData.append('amount', parseInt(fixAmount, 10));
-                        // formData.append('time_deposited', this.time_deposited);
                         formData.append('res_no', this.res_no);
 
                         axios.post('//' + window.location.host + '/booking/savePayment', formData)
-                            .then(() => {
+                            .then(response => {
                                 setTimeout(() => {
                                     loader.hide()
                                 },500)
-                                Swal.fire(
-                                    'Success!',
-                                    'Your Deposit Slip has been submitted. Kindly check your email from time to time to check its status.',
-                                    'success'
-                                )
+                                if(response.data - this.amount < 0) {
+                                    let compute = response.data - this.amount
+                                    Swal.fire(
+                                        'Success!',
+                                        'Your Deposit Slip amounting to <b>' + this.formatNumber(this.amount) + '</b> ' +
+                                        'has been submitted. If this will be approved, you will be refunded with the value of <b>' + this.formatNumber(Math.abs(compute)) +
+                                        '</b>.',
+                                        'success'
+                                    )
+                                } else {
+                                    Swal.fire(
+                                        'Success!',
+                                        'Your Deposit Slip amounting to <b>' + this.formatNumber(this.amount) + '</b> ' +
+                                        'has been submitted. If this will be approved, your remaining balance will be <b>' + this.formatNumber(response.data - this.amount) +
+                                        '</b> Kindly check your email from time to time to check its status.',
+                                        'success'
+                                    )
+                                }
+                                console.log(response.data)
                                 this.bank_name = '';
                                 this.amount = '';
                                 this.time_deposited = '';
                                 this.res_no = '';
                                 this.ref_no = '';
                                 document.getElementById("payment_slip_id").value = "";
-
-                                const index = async function () {
-                                    await new Promise(resolve => {
-                                        setTimeout(resolve, 5000)
-                                    })
-                                    window.location.replace('/');
-                                }
-
-                                index();
                             }).catch(response => {
                                 setTimeout(() => {
                                     loader.hide()
                                 },10)
-                                console.log(response)
                                 Swal.fire(
                                     'Failed!',
                                     'Reservation Number not found.',
@@ -269,6 +272,7 @@
                     setTimeout(() => {
                         loader.hide()
                     },10)
+                    this.cb_holder = this.res_no;
                     this.res_details = response.data.details;
 
                     let start_date = moment(this.res_details.reservation_details[0].start_date).format('YYYY-MM-DD 00:00:00');
