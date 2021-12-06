@@ -399,19 +399,21 @@
                         }).then(response => {
                             setTimeout(() => {
                                 loader.hide()
-                            },10)
-                            Swal.fire(
-                                'Success!',
-                                'Your reservation is confirmed. Please check your email address for further details.',
-                                'success'
-                            )
-                            // const index = async function () {
-                            //     await new Promise(resolve => {
-                            //         setTimeout(resolve, 5000)
-                            //     })
-                            //     window.location.replace('/');
-                            // }
-                            // index();
+                            }, 300)
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Your reservation is confirmed. Your reservation number is ' + response.data + '. Please check your email address for further details.',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                allowOutsideClick: false
+                            })
+                            const index = async function () {
+                                await new Promise(resolve => {
+                                    setTimeout(resolve, 10000)
+                                })
+                                window.location.replace('/');
+                            }
+                            index();
                         })
                     }
                 })

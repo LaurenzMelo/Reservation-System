@@ -123,15 +123,19 @@
                         </div>
                         <hr style="width: 25%; margin: auto">
                         <div class="row text-center mt-2 mb-2">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="font-weight-bold"> Amount to be Paid: </label><br>
                                 <span>{{ formatNumber(selected.reservation.amount) }}</span>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label class="font-weight-bold"> Amount to be Paid: </label><br>
+                                <span>{{ formatNumber(selected.reservation.amount / 2) }}</span>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="font-weight-bold"> Deposit Amount: </label><br>
                                 <span>{{ formatNumber(selected.amount) }}</span>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="font-weight-bold"> Amount Left (After accepting): </label><br>
                                 <span>{{ formatNumber(selected.reservation.amount - selected.amount) }}</span>
                             </div>

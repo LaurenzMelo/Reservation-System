@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title> Admin </title>
+    <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/icon type">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

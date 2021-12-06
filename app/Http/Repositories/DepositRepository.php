@@ -53,13 +53,13 @@ class DepositRepository
                 'isAcknowledged' => 1,
             ]);
 
-        $res = Reservation::where('id', $request->selected['reservation_id'])->first();
+        $res = Reservation::where('id', $request->selected['reservation_id'])->with('reservation_details')->first();
 
         $amount += $res['payment'];
 
         $mail = new PHPMailer(true);
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->SMTPDebug = 0;
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -71,6 +71,11 @@ class DepositRepository
         //Recipients
         $mail->setFrom('sandbarbeachresort@gmail.com', 'Sand Bar Beach Resort');
         $mail->addAddress($res['email'], $res['first_name'] . ' ' . $res['last_name']);
+
+        // dd($res->reservation_details[0]['start_date']);
+        $check_in = Carbon::parse($res->reservation_details[0]['start_date'])->toDateString();
+        $check_out = Carbon::parse($res->reservation_details[0]['end_date'])->toDateString();
+        
 
         if ($amount >= $res['amount']) {
             $changeResNo = $res['last_name'] . '_' . $res['reservation_no'];
@@ -89,12 +94,18 @@ class DepositRepository
                 $mail->Body    = 'Your Deposit Slip is now approved!
                     Your payment is now complete. Your new booking number is <b>' . $changeResNo . '</b>. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
                     day of your reservation.
+                    <br><br>Here is your reservation details:
+                    <br>➣ Reservation Date: ' . Carbon::parse($check_in)->format('M d Y') . ' to ' . Carbon::parse($check_out)->format('M d Y') . '
+                    <br>➣ No. of Days: ' . Carbon::parse($check_out)->diffInDays(Carbon::parse($check_in)) . '
                     <br><br> If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
                 $mail->AltBody = 'Your Deposit Slip is now approved!
                     Your payment is now complete. Your new booking number is ' . $changeResNo . '. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
-                    day of your reservation. If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
+                    day of your reservation. 
+                    Here is your reservation details:
+                    ➣ Reservation Date: ' . Carbon::parse($check_in)->format('M d Y') . ' to ' . Carbon::parse($check_out)->format('M d Y') . '
+                    ➣ No. of Days: ' . Carbon::parse($check_out)->diffInDays(Carbon::parse($check_in)) . 'If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
                 $mail->send();
@@ -114,12 +125,23 @@ class DepositRepository
                 $mail->Subject = 'Payment Success - Sand Bar Beach Resort';
                 $mail->Body    = 'Your Deposit Slip is now approved!
                     However, your payment is not yet complete. Please be reminded that the check in on the resort is at exactly 2:00 pm on the day of your reservation.
-                    <br><br> If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
+                    <br><br>Here is your reservation details:
+                    <br>➣ Reservation No.: ' . $res['reservation_no'] . '
+                    <br>➣ Reservation Date: ' . Carbon::parse($check_in)->format('M d Y') . ' to ' . Carbon::parse($check_out)->format('M d Y') . '
+                    <br>➣ No. of Days: ' . Carbon::parse($check_out)->diffInDays(Carbon::parse($check_in)) . '
+                    <br>➣ Amount Left: ' . $this->asPeso(floatVal($res['amount'] - $amount)) . '
+                    <br><br>If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
                 $mail->AltBody = 'Your Deposit Slip is approved!
                     However, your payment is not yet complete. Please be reminded that the check in on the resort is at exactly 2:00 pm on the
-                    day of your reservation. If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
+                    day of your reservation. 
+                    Here is your reservation details:
+                    ➣ Reservation No.: ' . $res['reservation_no'] . '
+                    ➣ Reservation Date: ' . Carbon::parse($check_in)->format('M d Y') . ' to ' . Carbon::parse($check_out)->format('M d Y') . '
+                    ➣ No. of Days: ' . Carbon::parse($check_out)->diffInDays(Carbon::parse($check_in)) . '
+                    ➣ Amount Left: ' . $this->asPeso(floatVal($res['amount'] - $amount)) . '
+                    If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439.
                     Once Again, Thank you for choosing Sand Bar Beach Resort!';
 
                 $mail->send();
@@ -136,7 +158,7 @@ class DepositRepository
         $mail = new PHPMailer(true);
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->SMTPDebug = 0;
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;

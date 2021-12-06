@@ -169,6 +169,10 @@
                                 >
                                     <i class="fas fa-door-closed"></i>
                                 </button>
+                                <button class="btn btn-info btn-sm"
+                                        @click="printReceipt(item)">
+                                    T
+                                </button>
                             </template>
                         </v-data-table>
                     </v-card>
@@ -399,10 +403,42 @@
                 </div>
             </div>
         </div>
+
+        <div class="d-none">
+            <table class="table table-striped room-list" id="this_is_id" v-if="click_checkOut === true">
+                <thead>
+                <tr>
+                    <th class="font-weight-bold text-center" scope="col">Date</th>
+                    <th class="font-weight-bold text-center" scope="col">Description</th>
+                    <th class="font-weight-bold text-center" scope="col">Quantity</th>
+                    <th class="font-weight-bold text-center" scope="col">Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="c in checkOut_select.reservation_details" :key="c.id">
+                        <td>
+                            {{ formatDate(c.created_at) }}
+                        </td>
+                        <td>
+                            Room Charge - {{ c.rooms.name }}
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>                           
+                            {{ c.rooms.amount * stay }} 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
+    import jsPDF from 'jspdf'
+    import autoTable from 'jspdf-autotable'
+
     export default {
         props: ['auth'],
         data() {
@@ -433,6 +469,9 @@
                 total_amount: 0,
                 karaoke_hrs: 0,
                 karaoke_amount: 0,
+                click_checkOut: false,
+                checkOut_select: [],
+                stay: 0,
             }
         },
         watch: {
@@ -555,7 +594,6 @@
                 this.pay_trigger = true;
             },
             checkOut(val) {
-                console.log(val);
                 if(val.is_paid != 1) {
                     Swal.fire(
                         'Error',
@@ -579,16 +617,126 @@
                                 setTimeout(() => {
                                     loader.hide()
                                 },500)
+                                console.log(response.data)
                                 Swal.fire(
                                     'Complete!',
                                     'Payment Successful',
                                     'success'
                                 )
+
+                                var this2 = this;
+                                const f = async function () { 
+                                    let start_date = moment(response.data.reservation_details[0].start_date).format('YYYY-MM-DD 00:00:00');
+                                    let end_date = moment(response.data.reservation_details[0].end_date).format('YYYY-MM-DD 00:00:00');
+
+                                    let date1 = moment(start_date);
+                                    let date2 = moment(end_date);
+                                    this2.stay = date2.diff(date1, 'days');
+                                    this2.click_checkOut = true;
+                                    this2.checkOut_select = response.data; 
+                                    
+                                    await new Promise(resolve => {
+                                        setTimeout(resolve,100)
+                                    })
+                                    this2.printReceipt(this2.checkOut_select);
+                                }
+                                f();
+
+                                this.getReservationUpcoming();
                                 this.getReservationOngoing();
                             })
                         }
                     });
                 }
+            },
+            printReceipt(res) {
+                let date_today = moment(Date.now()).format('MMM. DD, YYYY')
+                let arrival_date = moment(res.reservation_details[0].start_date).format('MMM. DD, YYYY')
+                let dep_date = moment(res.reservation_details[0].end_date).format('MMM. DD, YYYY')
+
+                let max = 999999;
+                let min = 111111;
+                let invoice_no = 'CN-' + String(Math.floor(Math.random() * (max - min + 1) + min));
+
+                const doc = new jsPDF()
+                const logo = new Image()
+                logo.src = '/images/logo.png'
+                
+                doc.addImage(logo, 'PNG', 80, 5, 50, 50, 'left');
+
+                doc.setFont('Courier', 'bold');
+                doc.setFontSize(16);
+                doc.text('Invoice', 90, 55);
+
+                doc.setFont('Courier', 'normal');
+                doc.setFontSize(12);
+                doc.text('Date: ', 145, 65);
+                doc.setFont('Courier', 'bold');
+                doc.text(date_today, 160, 65);
+
+                doc.setFont('Courier', 'normal');
+                doc.text('Bill To:', 10, 85);
+                doc.setFont('Courier', 'bold');
+                doc.text(res.first_name + ' ' + res.last_name, 32, 85);
+
+                doc.setFont('Courier', 'normal');
+                doc.text('Invoice No.:', 10, 90);
+                doc.setFont('Courier', 'bold');
+                doc.text(invoice_no, 42, 90);
+
+                doc.setFont('Courier', 'normal');
+                doc.text('Arrival Date: ', 125, 105);
+                doc.text('Departure Date: ', 120, 110);
+                doc.setFont('Courier', 'bold');
+                doc.text(arrival_date, 160, 105);
+                doc.text(dep_date, 160, 110);
+
+                doc.setFont('Courier', 'normal');
+                doc.autoTable({ html: '#this_is_id',
+                    headStyles:{ fillColor: [34, 35, 36], halign:'center'},
+                    styles:{cellPadding: 2, fontSize:10,},
+                    columnStyles: {
+                        0: {cellWidth: 40, halign:'center'},
+                        1: {cellWidth: 60, halign:'center'},
+                        2: {cellWidth: 40, halign:'center'},
+                        3: {cellWidth: 40, halign:'center'},
+                    },
+                    startY:130,
+                });
+
+                let finalY = doc.lastAutoTable.finalY + 40;
+                
+                doc.text('Total Amount:', 100, finalY);
+                doc.setFont('Courier', 'bold');
+                doc.text(this.withoutPeso(res.amount), 160, finalY)
+
+                finalY += 5;
+
+                doc.setFont('Courier', 'normal');
+                doc.text('Payment Received:', 100, finalY);
+                doc.setFont('Courier', 'bold');
+                doc.text(this.withoutPeso(res.payment), 160, finalY)
+
+                finalY += 5;
+
+                doc.setFont('Courier', 'normal');
+                doc.text('Balance Due:', 100, finalY);
+                doc.setFont('Courier', 'bold');
+                doc.text(this.withoutPeso(res.amount - res.payment), 160, finalY)
+
+                finalY += 30
+
+                doc.setLineWidth(0.5);
+                doc.line(125, finalY, 193, finalY);
+                doc.line(20, finalY, 88, finalY);
+
+                finalY += 5
+
+                doc.setFont('Courier', 'bold');
+                doc.text('Guest Signature', 140, finalY)
+                doc.text('Admin Signature', 33, finalY)
+
+                doc.save('Sample.pdf');
             },
             checkIn(item) {
                 var date_now = moment(Date.now()).format('YYYY-MM-DD 00:00:00');
@@ -700,7 +848,6 @@
                             this.res_ongoing.push(response.data[i]);
                         }
                     });
-                console.log(this.res_ongoing);
             },
             getReservationExpired() {
                 this.res_expired = [];
@@ -722,6 +869,9 @@
             },
             formatNumber(num) {
                 return '₱' + parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            },
+            withoutPeso(num) {
+                return parseFloat(num).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             },
             formatDate(value) {
                 return moment(value).format('MMM. DD, YYYY')

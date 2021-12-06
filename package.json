@@ -26,6 +26,8 @@
     },
     "dependencies": {
         "chart.js": "^2.9.4",
+        "jspdf": "^2.4.0",
+        "jspdf-autotable": "^3.5.23",
         "moment": "^2.29.1",
         "sweetalert2": "^10.14.0",
         "v-calendar": "^2.2.3",

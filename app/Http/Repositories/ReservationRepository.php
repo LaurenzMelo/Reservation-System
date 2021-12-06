@@ -57,7 +57,7 @@ class ReservationRepository
 
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->SMTPDebug = 0;
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
@@ -100,7 +100,7 @@ class ReservationRepository
                 If you have any concern, please email us at sandbarbeachresort@gmail.com or call us at 0918-449-5439. Thank you and have a nice day!';
 
             $mail->send();
-            echo 'Message has been sent';
+            return $reservation_no;
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
@@ -213,10 +213,16 @@ class ReservationRepository
 
     public function checkOut($request)
     {
-        return Reservation::where('id', $request->id)
+        $res = Reservation::where('id', $request->id)
             ->update([
                 'is_checked_out' => 1,
             ]);
+
+        return Reservation::where('id', $request->id)
+        ->with(['deposits', 'reservation_details' => function ($q) {
+            $q->with('rooms');
+        },])
+        ->first();
     }
 
     public function payCash($request)
