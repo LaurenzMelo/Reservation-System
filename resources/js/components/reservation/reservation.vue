@@ -169,10 +169,6 @@
                                 >
                                     <i class="fas fa-door-closed"></i>
                                 </button>
-                                <button class="btn btn-info btn-sm"
-                                        @click="printReceipt(item)">
-                                    T
-                                </button>
                             </template>
                         </v-data-table>
                     </v-card>
@@ -742,7 +738,7 @@
                 doc.text('Guest Signature', 140, finalY)
                 doc.text('Admin Signature', 33, finalY)
 
-                doc.save('Sample.pdf');
+                doc.save('Invoice-No.' + invoice_no + '.pdf');
             },
             checkIn(item) {
                 var date_now = moment(Date.now()).format('YYYY-MM-DD 00:00:00');
